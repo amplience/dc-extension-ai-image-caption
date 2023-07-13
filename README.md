@@ -1,70 +1,97 @@
-# Getting Started with Create React App
+![Amplience Dynamic Content AI Image Caption Extension](media/screenshot.png)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# dc-extension-ai-image-caption
 
-## Available Scripts
+> AI powered image caption text field for use in [Amplience Dynamic Content](https://amplience.com/dynamic-content)
 
-In the project directory, you can run:
+This extension uses artificial intelligence to automatically generate image captions for use as alternative text, which is read aloud by screen readers used by visually impaired users.
 
-### `npm start`
+Users can choose to manually populate the caption or use the automatically generated caption.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## How to install
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Register Extension
 
-### `npm test`
+This extension needs to be [registered](https://amplience.com/docs/development/registeringextensions.html) against a Hub with in the Dynamic Content application (Developer -> Extensions).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+![Setup](media/setup.png)
 
-### `npm run build`
+- Category: Content Field
+- Label: AI Image Caption
+- Name: ai-image-caption _(needs to be unique with the Hub)_
+- URL: [https://ai-image-caption.extensions.content.amplience.net](https://ai-image-caption.extensions.content.amplience.net)
+- Description: _(can be left blank, if you wish)_
+- Initial height: 200
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+#### Permissions
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+![Permissions](media/permissions.png)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Assign the extension to schema
 
-### `npm run eject`
+To use the extension, you simply need to add an image field and a string field, which represents the caption, to your content type schema.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+The string field should be configured to use the extension along with an `image` param, which informs the extension which image property it should be linked to.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The `image` param should be a valid [JSON pointer](https://datatracker.ietf.org/doc/html/rfc6901).
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```json
+{
+  "image": {
+    "title": "Hero Image",
+    "allOf": [
+      {
+        "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link"
+      }
+    ]
+  },
+  "imageCaption": {
+    "title": "Hero Alt Text",
+    "type": "string",
+    "minLength": 0,
+    "maxLength": 200,
+    "ui:extension": {
+      "name": "ai-image-caption",
+      "params": {
+        "image": "/image"
+      }
+    }
+  }
+}
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Configuration
 
-## Learn More
+You can customize the extension by providing "params" in your installation parameters or inside the content type schema.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Image property
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The extension must be linked to an image property using a [JSON pointer](https://datatracker.ietf.org/doc/html/rfc6901). When a caption is requested, the extension will use the image assigned to this property as the input.
 
-### Code Splitting
+```json
+{
+  "image": "/pointer/to/image"
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Auto caption
 
-### Analyzing the Bundle Size
+If enabled, the extension will automatically generate a caption when the image property is populated instead of requiring the user to manually press the caption button.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```json
+{
+  "autoCaption": true
+}
+```
 
-### Making a Progressive Web App
+## How to run locally
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Extension:
 
-### Advanced Configuration
+- `npm run install`
+- `npm run build`
+- `npm run start`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Storybook:
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- `npm run storybook`
