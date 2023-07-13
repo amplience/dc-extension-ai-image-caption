@@ -126,7 +126,7 @@ function CaptionExtension() {
     } catch (err) {
       return undefined;
     }
-  }, [imagePointer, sdk.formValue]);
+  }, [imagePointer, sdk.formValue, defaultHost]);
 
   const handleChange = (event) => {
     const newValue = event.target.value;
@@ -178,12 +178,13 @@ function CaptionExtension() {
 
   useEffect(() => {
     sdk.field.setValue(inputValue);
-  }, [inputValue]);
+  }, [sdk.field, inputValue]);
 
   useEffect(() => {
     if (canCaption && autoCaption && (inputValue === "" || !inputValue)) {
       handleCaption();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageUrl]);
 
   return (

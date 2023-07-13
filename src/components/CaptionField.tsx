@@ -1,7 +1,6 @@
 import React from "react";
-import { Box, IconButton, InputAdornment } from "@mui/material";
+import { IconButton, InputAdornment } from "@mui/material";
 
-import AssistantIcon from "@mui/icons-material/Assistant";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import SparkleIcon from "./SparkleIcon";
 
