@@ -15,7 +15,20 @@ const Wrapper = ({ organizationId, initialValue, schema, params }) => {
           "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link",
       },
       id: "338b8186-fa51-4427-8f43-edcc83b4763c",
-      name: "Sandicliffe-May-Bank-Holiday-Blog-Banner",
+      name: "image1",
+      endpoint: "ampliencelabs",
+      defaultHost: "cdn.media.amplience.net",
+    });
+  };
+
+  const handlePopulateImage2 = () => {
+    setImageField({
+      _meta: {
+        schema:
+          "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link",
+      },
+      id: "338b8186-fa51-4427-8f43-edcc83b4763c",
+      name: "image2",
       endpoint: "ampliencelabs",
       defaultHost: "cdn.media.amplience.net",
     });
@@ -34,13 +47,18 @@ const Wrapper = ({ organizationId, initialValue, schema, params }) => {
       value={
         {
           connection: {
-            request: async () => {
-              await new Promise((resolve) => setTimeout(resolve, 3000));
+            request: async (request, { vars }) => {
+              await new Promise((resolve) =>
+                setTimeout(
+                  resolve,
+                  vars.imageUrl.indexOf("image1") !== -1 ? 10000 : 1000
+                )
+              );
               return {
                 data: {
                   node: {
                     generateCaptionForImage: {
-                      caption: "generated caption",
+                      caption: vars.imageUrl,
                     },
                   },
                 },
@@ -73,6 +91,7 @@ const Wrapper = ({ organizationId, initialValue, schema, params }) => {
         <CaptionExtension />
         <Box sx={{ display: "flex", flexDirection: "row" }}>
           <Button onClick={handlePopulateImage}>Populate Image Field</Button>
+          <Button onClick={handlePopulateImage2}>Populate Image Field 2</Button>
           <Button onClick={handlePopulateNonImage}>
             Populate Image Field with non-image
           </Button>
