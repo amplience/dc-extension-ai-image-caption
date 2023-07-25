@@ -4,6 +4,8 @@
 
 > AI powered image caption text field for use in [Amplience Dynamic Content](https://amplience.com/dynamic-content)
 
+Note: This extension is in **BETA** for use as is without support or warranty
+
 This extension uses artificial intelligence to automatically generate image captions for use as alternative text, which is read aloud by screen readers used by visually impaired users.
 
 Users can choose to manually populate the caption or use the automatically generated caption.
@@ -83,6 +85,12 @@ If enabled, the extension will automatically generate a caption when the image p
   "autoCaption": true
 }
 ```
+
+## Limitations
+
+- 50 caption limit per day per organization
+- This extension is only compatible with hubs that are linked to an organization. Accounts that have not yet [migrated](https://amplience.com/developers/docs/knowledge-center/faqs/account/) from legacy permissions will not see the AI caption feature.
+- This extension is in **BETA** for use as is without support or warranty
 
 ## How to run locally
 
