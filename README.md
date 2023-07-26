@@ -86,6 +86,18 @@ If enabled, the extension will automatically generate a caption when the image p
 }
 ```
 
+### Image Host
+
+By default, this extension consumes images from your virtual staging environment. If your VSE is [configured](https://amplience.com/developers/docs/dev-tools/guides-tutorials/virtual-staging/#virtual-staging-environment-security) to only allow access from a limited set of IP addresses the AI captioning system will be unable to load the images for captioning.
+
+You can configure the extension to load images from a different host using the `imageHost` parameter. The example below will load images from the public published URL which will allow image captioning for any published image.
+
+```json
+{
+  "imageHost": "https://cdn.media.amplience.net"
+}
+```
+
 ## Limitations
 
 - 50 caption limit per day per organization
