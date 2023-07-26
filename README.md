@@ -1,70 +1,117 @@
-# Getting Started with Create React App
+![Amplience Dynamic Content AI Image Caption Extension](media/screenshot.png)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# dc-extension-ai-image-caption
 
-## Available Scripts
+> AI powered image caption text field for use in [Amplience Dynamic Content](https://amplience.com/dynamic-content)
 
-In the project directory, you can run:
+Note: This extension is in **BETA** for use as is without support or warranty
 
-### `npm start`
+This extension uses artificial intelligence to automatically generate image captions for use as alternative text, which is read aloud by screen readers used by visually impaired users.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Users can choose to manually populate the caption or use the automatically generated caption.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## How to install
 
-### `npm test`
+### Register Extension
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+This extension needs to be [registered](https://amplience.com/docs/development/registeringextensions.html) against a Hub with in the Dynamic Content application (Developer -> Extensions).
 
-### `npm run build`
+![Setup](media/setup.png)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Category: Content Field
+- Label: AI Image Caption
+- Name: ai-image-caption _(needs to be unique with the Hub)_
+- URL: [https://ai-image-caption.extensions.content.amplience.net](https://ai-image-caption.extensions.content.amplience.net)
+- Description: _(can be left blank, if you wish)_
+- Initial height: 200
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+#### Permissions
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+![Permissions](media/permissions.png)
 
-### `npm run eject`
+### Assign the extension to schema
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+To use the extension, you simply need to add an image field and a string field, which represents the caption, to your content type schema.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The string field should be configured to use the extension along with an `image` param, which informs the extension which image property it should be linked to.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+The `image` param should be a valid [JSON pointer](https://datatracker.ietf.org/doc/html/rfc6901).
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```json
+{
+  "image": {
+    "title": "Hero Image",
+    "allOf": [
+      {
+        "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link"
+      }
+    ]
+  },
+  "imageCaption": {
+    "title": "Hero Alt Text",
+    "type": "string",
+    "minLength": 0,
+    "maxLength": 200,
+    "ui:extension": {
+      "name": "ai-image-caption",
+      "params": {
+        "image": "/image"
+      }
+    }
+  }
+}
+```
 
-## Learn More
+## Configuration
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+You can customize the extension by providing "params" in your installation parameters or inside the content type schema.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Image property
 
-### Code Splitting
+The extension must be linked to an image property using a [JSON pointer](https://datatracker.ietf.org/doc/html/rfc6901). When a caption is requested, the extension will use the image assigned to this property as the input.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```json
+{
+  "image": "/pointer/to/image"
+}
+```
 
-### Analyzing the Bundle Size
+### Auto caption
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+If enabled, the extension will automatically generate a caption when the image property is populated instead of requiring the user to manually press the caption button.
 
-### Making a Progressive Web App
+```json
+{
+  "autoCaption": true
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Image Host
 
-### Advanced Configuration
+By default, this extension consumes images from your virtual staging environment. If your VSE is [configured](https://amplience.com/developers/docs/dev-tools/guides-tutorials/virtual-staging/#virtual-staging-environment-security) to only allow access from a limited set of IP addresses the AI captioning system will be unable to load the images for captioning.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+You can configure the extension to load images from a different host using the `imageHost` parameter. The example below will load images from the public published URL which will allow image captioning for any published image.
 
-### Deployment
+```json
+{
+  "imageHost": "https://cdn.media.amplience.net"
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Limitations
 
-### `npm run build` fails to minify
+- 50 caption limit per day per organization
+- This extension is only compatible with hubs that are linked to an organization. Accounts that have not yet [migrated](https://amplience.com/developers/docs/knowledge-center/faqs/account/) from legacy permissions will not see the AI caption feature.
+- This extension is in **BETA** for use as is without support or warranty
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## How to run locally
+
+Extension:
+
+- `npm run install`
+- `npm run build`
+- `npm run start`
+
+Storybook:
+
+- `npm run storybook`
