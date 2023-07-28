@@ -94,7 +94,7 @@ You can configure the extension to load images from a different host using the `
 
 ```json
 {
-  "imageHost": "https://cdn.media.amplience.net"
+  "imageHost": "cdn.media.amplience.net"
 }
 ```
 
