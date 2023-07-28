@@ -4,7 +4,14 @@ import { useState } from "react";
 import { ContentFieldExtensionContext } from "./WithFieldExtension";
 import { Box, Button } from "@mui/material";
 
-const Wrapper = ({ organizationId, initialValue, schema, params }) => {
+const Wrapper = ({
+  organizationId,
+  initialValue,
+  schema,
+  params,
+  formValue,
+  fieldPointer,
+}) => {
   const [value, setValue] = useState(initialValue || undefined);
   const [imageField, setImageField] = useState(undefined);
 
@@ -46,6 +53,7 @@ const Wrapper = ({ organizationId, initialValue, schema, params }) => {
     <ContentFieldExtensionContext.Provider
       value={
         {
+          fieldPointer,
           connection: {
             request: async (request, { vars }) => {
               await new Promise((resolve) =>
@@ -73,9 +81,12 @@ const Wrapper = ({ organizationId, initialValue, schema, params }) => {
             setValue: async (value: string) => {
               setValue(value);
             },
+            validate: (value) => {
+              return [{ pointer: fieldPointer }];
+            },
           },
           form: {},
-          formValue: {
+          formValue: formValue || {
             img: imageField,
             caption: value,
           },
@@ -228,5 +239,73 @@ export const AutoCaption: Story = {
     },
     organizationId: "org12345",
     initialValue: {},
+  },
+};
+
+export const WithRelativePointer: Story = {
+  args: {
+    schema: {
+      title: "Caption",
+      description: "Alt text",
+    },
+    params: {
+      installation: {
+        image: "3/img",
+      },
+    },
+    organizationId: "org12345",
+    initialValue: "saved value",
+    fieldPointer: "/seo/image/alt",
+    formValue: {
+      img: {
+        _meta: {
+          schema:
+            "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link",
+        },
+        id: "338b8186-fa51-4427-8f43-edcc83b4763c",
+        name: "image1",
+        endpoint: "ampliencelabs",
+        defaultHost: "cdn.media.amplience.net",
+      },
+      seo: {
+        image: {
+          alt: "caption",
+        },
+      },
+    },
+  },
+};
+
+export const WithNestedRelativePointer: Story = {
+  args: {
+    schema: {
+      title: "Caption",
+      description: "Alt text",
+    },
+    params: {
+      installation: {
+        image: "2/src",
+      },
+    },
+    organizationId: "org12345",
+    initialValue: "saved value",
+    fieldPointer: "/image/seo/alt",
+    formValue: {
+      image: {
+        src: {
+          _meta: {
+            schema:
+              "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link",
+          },
+          id: "338b8186-fa51-4427-8f43-edcc83b4763c",
+          name: "image1",
+          endpoint: "ampliencelabs",
+          defaultHost: "cdn.media.amplience.net",
+        },
+        seo: {
+          alt: "caption",
+        },
+      },
+    },
   },
 };
