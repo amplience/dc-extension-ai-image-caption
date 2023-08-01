@@ -76,6 +76,32 @@ The extension must be linked to an image property using a [JSON pointer](https:/
 }
 ```
 
+If the caption extension is used inside a partial that is included in multiple content types, you can use a [relative JSON pointer](<https://json-schema.org/draft/2019-09/relative-json-pointer.html#:~:text=JSON%20Pointer%20(RFC%206901)%20is,locations%20from%20within%20the%20document.>) to define the image field.
+
+```json
+{
+  "image": {
+    "allOf": [
+      {
+        "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link"
+      }
+    ]
+  },
+  "imageCaption": {
+    "title": "Hero Alt Text",
+    "type": "string",
+    "minLength": 0,
+    "maxLength": 200,
+    "ui:extension": {
+      "name": "ai-image-caption",
+      "params": {
+        "image": "1/image"
+      }
+    }
+  }
+}
+```
+
 ### Auto caption
 
 If enabled, the extension will automatically generate a caption when the image property is populated instead of requiring the user to manually press the caption button.
