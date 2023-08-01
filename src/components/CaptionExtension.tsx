@@ -130,7 +130,7 @@ function CaptionExtension() {
     } catch (err) {
       return undefined;
     }
-  }, [imagePointer, sdk.formValue, defaultHost]);
+  }, [imagePointer, sdk.formValue, sdk.fieldPointer, defaultHost]);
 
   const handleChange = (event) => {
     const newValue = event.target.value;
