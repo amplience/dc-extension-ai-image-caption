@@ -258,7 +258,7 @@ export function deletePointer<T = any>(
   return true;
 }
 
-export default {
+const exports = {
   escape,
   unescape,
   append,
@@ -271,3 +271,5 @@ export default {
   deletePointer,
   isValid,
 };
+
+export default exports;
