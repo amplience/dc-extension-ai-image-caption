@@ -1,6 +1,6 @@
 {
   "name": "dc-extension-ai-image-caption",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "dependencies": {
     "@datadog/browser-rum": "^4.45.0",
@@ -12,7 +12,6 @@
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
     "dc-extensions-sdk": "^2.2.0",
-    "json-pointer": "^0.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",

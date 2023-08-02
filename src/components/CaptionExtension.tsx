@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useReducer } from "react";
 import { useContentFieldExtension } from "./WithFieldExtension";
 import CaptionField from "./CaptionField";
-import pointer from "json-pointer";
+import RelativeJSONPointer from "../utils/RelativeJSONPointer";
 
 type SetInputValueReducerAction = {
   type: "SET_INPUT_VALUE";
@@ -109,7 +109,11 @@ function CaptionExtension() {
 
   const imageUrl = useMemo(() => {
     try {
-      const imageValue = pointer.get(sdk.formValue, imagePointer);
+      const imageValue = RelativeJSONPointer.evaluate(
+        imagePointer,
+        sdk.formValue,
+        sdk.fieldPointer
+      );
       if (
         !imageValue ||
         imageValue?._meta?.schema !==
@@ -126,7 +130,7 @@ function CaptionExtension() {
     } catch (err) {
       return undefined;
     }
-  }, [imagePointer, sdk.formValue, defaultHost]);
+  }, [imagePointer, sdk.formValue, sdk.fieldPointer, defaultHost]);
 
   const handleChange = (event) => {
     const newValue = event.target.value;
