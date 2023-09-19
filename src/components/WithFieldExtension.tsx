@@ -46,30 +46,11 @@ function WithContentFieldExtension({ children, pollForm = true }) {
           .catch(() => {});
       });
       sdk.frame.startAutoResizer();
-      sdk.form.onReadOnlyChange((newValue) => {
-        setReadOnly(newValue);
-      });
+      sdk.form.onReadOnlyChange(setReadOnly);
+      sdk.form.onFormValueChange(setFormValue);
     });
     return () => {};
   }, []);
-
-  useEffect(() => {
-    if (!pollForm || !sdk) {
-      return () => {};
-    }
-
-    const interval = setInterval(async () => {
-      try {
-        setFormValue(await sdk.form.getValue());
-      } catch (err) {
-        setFormValue({});
-      }
-    }, 500);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [sdk, pollForm]);
 
   return (
     sdk && (
