@@ -15,7 +15,7 @@ export function useContentFieldExtension(): ContentFieldExtensionContextState {
   return useContext(ContentFieldExtensionContext);
 }
 
-function WithContentFieldExtension({ children, pollForm = true }) {
+function WithContentFieldExtension({ children }) {
   const [sdk, setSDK] = useState(undefined);
   const [initialValue, setInitialValue] = useState(undefined);
   const [formValue, setFormValue] = useState({});
