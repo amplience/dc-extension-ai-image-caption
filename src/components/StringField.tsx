@@ -14,7 +14,13 @@ export type StringFieldProps = TextFieldProps & {
 };
 
 function StringField(props: StringFieldProps) {
-  const { schema = {}, value, readOnly, loading = false } = props;
+  const {
+    schema = {},
+    value,
+    readOnly,
+    loading = false,
+    ...fieldProps
+  } = props;
   const label = schema?.title || "";
   const description = schema?.description || "";
 
@@ -50,7 +56,8 @@ function StringField(props: StringFieldProps) {
         label={label}
         disabled={loading || readOnly || props.disabled}
         aria-label={description || label}
-        {...props}
+        value={value}
+        {...fieldProps}
       />
 
       <LinearProgress
