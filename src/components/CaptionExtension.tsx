@@ -67,18 +67,18 @@ const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
   }
 };
 
-const query = `
-  query generateCaptionForImage($orgId: ID!, $imageUrl: String!) {
-    node(id: $orgId) {
-      id
-      ... on Organization {
-        id
-        generateCaptionForImage(imageUrl: $imageUrl) {
-          caption
-        }
+const mutation = `
+  mutation {
+    generateCaptionForImage(
+      input: {
+        organizationId: $orgId
+        imageUrl: $imageUrl
       }
+    ) {
+      caption
     }
-  }`;
+  }
+`;
 
 function CaptionExtension() {
   const sdk = useContentFieldExtension();
@@ -147,9 +147,9 @@ function CaptionExtension() {
       dispatch({ type: "START_CAPTION", imageUrl: currentImageUrl });
 
       const { data } = await sdk.connection.request(
-        "dc-management-sdk-js:graphQL",
+        "dc-management-sdk-js:graphql-mutation",
         {
-          query,
+          mutation,
           vars: {
             orgId: btoa(`Organization:${sdk.hub.organizationId}`),
             imageUrl: imageUrl,

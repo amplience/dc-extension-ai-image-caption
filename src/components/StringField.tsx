@@ -50,7 +50,7 @@ function StringField(props: StringFieldProps) {
         label={label}
         disabled={loading || readOnly || props.disabled}
         aria-label={description || label}
-        {...props}
+        value={value}
       />
 
       <LinearProgress
