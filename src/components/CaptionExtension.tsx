@@ -134,6 +134,7 @@ function CaptionExtension() {
 
   const handleChange = (event) => {
     const newValue = event.target.value;
+    sdk.field.setValue(newValue);
     dispatch({ type: "SET_INPUT_VALUE", inputValue: newValue });
   };
 
@@ -179,10 +180,6 @@ function CaptionExtension() {
   const handleCancelCaption = () => {
     dispatch({ type: "CANCEL_CAPTION" });
   };
-
-  useEffect(() => {
-    sdk.field.setValue(inputValue);
-  }, [sdk.field, inputValue]);
 
   useEffect(() => {
     if (canCaption && autoCaption && (inputValue === "" || !inputValue)) {
