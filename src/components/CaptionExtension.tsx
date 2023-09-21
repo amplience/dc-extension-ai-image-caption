@@ -134,6 +134,7 @@ function CaptionExtension() {
 
   const handleChange = (event) => {
     const newValue = event.target.value;
+
     sdk.field.setValue(newValue);
     dispatch({ type: "SET_INPUT_VALUE", inputValue: newValue });
   };
@@ -160,6 +161,8 @@ function CaptionExtension() {
 
       if (data?.node?.generateCaptionForImage?.caption) {
         const caption = data.node.generateCaptionForImage?.caption;
+        sdk.field.setValue(caption);
+
         dispatch({
           type: "COMPLETE_CAPTION",
           caption,
