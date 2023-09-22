@@ -24,18 +24,10 @@ function StringField(props: StringFieldProps) {
   const label = schema?.title || "";
   const description = schema?.description || "";
 
-  const maxLength =
-    schema?.maxLength && typeof schema?.maxLength === "number"
-      ? schema?.maxLength
-      : undefined;
-
-  const minLength =
-    schema?.minLength && typeof schema?.minLength === "number"
-      ? schema?.minLength
-      : undefined;
-
+  const maxLength = schema?.maxLength;
+  const minLength = schema?.minLength;
   const pattern =
-    schema?.pattern && typeof schema?.pattern === "string"
+    typeof schema?.pattern === "string"
       ? new RegExp(schema?.pattern)
       : undefined;
 
