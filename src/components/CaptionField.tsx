@@ -1,5 +1,5 @@
 import React from "react";
-import { IconButton, InputAdornment } from "@mui/material";
+import { IconButton, InputAdornment, Tooltip } from "@mui/material";
 
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import SparkleIcon from "./SparkleIcon";
@@ -42,15 +42,17 @@ function CaptionField(props: CaptionFieldProps) {
                 <CancelOutlinedIcon fontSize="medium" />
               </IconButton>
             ) : (
-              <IconButton
-                aria-label="generate caption"
-                edge="end"
-                color="primary"
-                onClick={onCaption}
-                disabled={captioningDisabled || readOnly}
-              >
-                <SparkleIcon />
-              </IconButton>
+              <Tooltip title="Generate Alt Text" placement="left">
+                <IconButton
+                  aria-label="generate caption"
+                  edge="end"
+                  color="primary"
+                  onClick={onCaption}
+                  disabled={captioningDisabled || readOnly}
+                >
+                  <SparkleIcon />
+                </IconButton>
+              </Tooltip>
             )}
           </InputAdornment>
         ) : undefined,
