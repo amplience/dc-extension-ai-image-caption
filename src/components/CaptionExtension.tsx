@@ -84,10 +84,7 @@ function CaptionExtension() {
   const sdk = useContentFieldExtension();
 
   const [{ inputValue, status }, dispatch] = useReducer(reducer, {
-    inputValue:
-      sdk.initialValue && typeof sdk.initialValue === "string"
-        ? sdk.initialValue
-        : "",
+    inputValue: sdk?.initialValue || "",
     status: "idle",
   });
 
@@ -135,7 +132,7 @@ function CaptionExtension() {
   const handleChange = (event) => {
     const newValue = event.target.value;
 
-    sdk.field.setValue(newValue);
+    sdk.field.setValue(newValue).catch(() => {});
     dispatch({ type: "SET_INPUT_VALUE", inputValue: newValue });
   };
 
@@ -161,7 +158,7 @@ function CaptionExtension() {
 
       if (data?.node?.generateCaptionForImage?.caption) {
         const caption = data.node.generateCaptionForImage?.caption;
-        sdk.field.setValue(caption);
+        sdk.field.setValue(caption).catch(() => {});
 
         dispatch({
           type: "COMPLETE_CAPTION",
