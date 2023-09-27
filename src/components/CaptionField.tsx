@@ -21,6 +21,7 @@ function CaptionField(props: CaptionFieldProps) {
     captioningVisible = true,
     captioningDisabled,
     readOnly,
+    error,
     ...other
   } = props;
 
@@ -30,6 +31,7 @@ function CaptionField(props: CaptionFieldProps) {
       readOnly={readOnly}
       style={{ width: "100%" }}
       loading={loading}
+      error={error}
       InputProps={{
         endAdornment: captioningVisible ? (
           <InputAdornment position="end" style={{ marginRight: 10 }}>
