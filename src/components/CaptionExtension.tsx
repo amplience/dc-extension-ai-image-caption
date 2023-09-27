@@ -68,7 +68,7 @@ const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
 };
 
 const mutation = `
-  mutation {
+  mutation generateCaptionForImage($orgId: ID!, $imageUrl: String!) {
     generateCaptionForImage(
       input: {
         organizationId: $orgId
@@ -157,8 +157,8 @@ function CaptionExtension() {
         }
       );
 
-      if (data?.node?.generateCaptionForImage?.caption) {
-        const caption = data.node.generateCaptionForImage?.caption;
+      if (data?.generateCaptionForImage?.caption) {
+        const caption = data.generateCaptionForImage.caption;
         dispatch({
           type: "COMPLETE_CAPTION",
           caption,
