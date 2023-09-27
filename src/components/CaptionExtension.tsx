@@ -203,7 +203,7 @@ function CaptionExtension() {
         schema={sdk.field.schema}
         readOnly={sdk.readOnly}
         loading={status === "captioning"}
-        error={captionError}
+        captionError={captionError}
       />
     </div>
   );
