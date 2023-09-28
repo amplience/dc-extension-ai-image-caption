@@ -67,18 +67,18 @@ const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
   }
 };
 
-const query = `
-  query generateCaptionForImage($orgId: ID!, $imageUrl: String!) {
-    node(id: $orgId) {
-      id
-      ... on Organization {
-        id
-        generateCaptionForImage(imageUrl: $imageUrl) {
-          caption
-        }
+const mutation = `
+  mutation generateCaptionForImage($orgId: ID!, $imageUrl: String!) {
+    generateCaptionForImage(
+      input: {
+        organizationId: $orgId
+        imageUrl: $imageUrl
       }
+    ) {
+      caption
     }
-  }`;
+  }
+`;
 
 let captionError = undefined;
 
@@ -148,9 +148,9 @@ function CaptionExtension() {
       dispatch({ type: "START_CAPTION", imageUrl: currentImageUrl });
 
       const { data } = await sdk.connection.request(
-        "dc-management-sdk-js:graphQL",
+        "dc-management-sdk-js:graphql-mutation",
         {
-          query,
+          mutation,
           vars: {
             orgId: btoa(`Organization:${sdk.hub.organizationId}`),
             imageUrl: imageUrl,
@@ -158,10 +158,9 @@ function CaptionExtension() {
         }
       );
 
-      if (data?.node?.generateCaptionForImage?.caption) {
-        const caption = data.node.generateCaptionForImage?.caption;
+      if (data?.generateCaptionForImage?.caption) {
+        const caption = data.generateCaptionForImage.caption;
         sdk.field.setValue(caption).catch(() => {});
-
         dispatch({
           type: "COMPLETE_CAPTION",
           caption,
