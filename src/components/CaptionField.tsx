@@ -42,7 +42,11 @@ function CaptionField(props: CaptionFieldProps) {
                 <CancelOutlinedIcon fontSize="medium" />
               </IconButton>
             ) : (
-              <Tooltip title="Generate Alt Text" placement="left">
+              <Tooltip
+                title="Generate Alt Text"
+                placement="left"
+                disableInteractive
+              >
                 <IconButton
                   aria-label="generate caption"
                   edge="end"
