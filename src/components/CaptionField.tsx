@@ -37,7 +37,9 @@ function CaptionField(props: CaptionFieldProps) {
     [`& .${tooltipClasses.tooltip}`]: {
       backgroundColor: "#1a222d",
       fontSize: "12px",
+      fontWeight: 500,
       lineHeight: "14px",
+      padding: "5px 9px",
     },
     [`& .${tooltipClasses.arrow}`]: {
       color: "#1a222d",
