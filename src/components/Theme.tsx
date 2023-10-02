@@ -7,7 +7,7 @@ import {
 
 const theme = extendTheme({
   typography: {
-    fontFamily: "'roboto', sans-serif",
+    fontFamily: "'IBM Plex Sans', sans-serif",
     fontSize: 12,
     caption: {
       fontSize: 11,
