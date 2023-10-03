@@ -11,7 +11,7 @@
     "@types/node": "^20.4.1",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
-    "dc-extensions-sdk": "amplience/dc-extensions-sdk#ba6539a1c1254d153ba985b4e8e8424345959ec1",
+    "dc-extensions-sdk": "amplience/dc-extensions-sdk#b25b6cca9cfe7bbaf3e6575d1d5b560dfb3da0d2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
