@@ -162,7 +162,6 @@ function CaptionExtension() {
   useEffect(() => {
     const getThumbUrl = async (id) => {
       const asset = await sdk.assets.getById(id);
-      console.log(asset);
       return `${asset.thumbURL}?w=512&h=512&upscale=false&sm=clamp`;
     };
     try {
@@ -181,6 +180,7 @@ function CaptionExtension() {
         getThumbUrl(imageValue.id).then(setImageUrl);
       }
     } catch (e) {
+      sdk.field.setValue("").catch(() => {});
       setImageUrl(undefined);
     }
   }, [sdk.formValue, sdk.fieldPointer, imagePointer, sdk.assets]);

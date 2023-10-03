@@ -49,7 +49,6 @@ function WithContentFieldExtension({ children }) {
       sdk.form.onReadOnlyChange(setReadOnly);
       sdk.form.onFormValueChange(setFormValue);
     });
-    return () => {};
   }, []);
 
   return (
