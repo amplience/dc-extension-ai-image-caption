@@ -183,7 +183,14 @@ function CaptionExtension() {
       sdk.field.setValue("").catch(() => {});
       setImageUrl(undefined);
     }
-  }, [sdk.formValue, sdk.fieldPointer, imagePointer, sdk.assets]);
+  }, [
+    sdk.formValue,
+    sdk.fieldPointer,
+    imagePointer,
+    sdk.assets,
+    sdk.field,
+    imageId,
+  ]);
 
   return (
     <div>
