@@ -182,7 +182,7 @@ function CaptionExtension() {
     } catch (e) {
       setImageUrl(undefined);
     }
-  }, [sdk.formValue, sdk.fieldPointer, imagePointer, sdk.assets]);
+  }, [sdk.formValue, sdk.fieldPointer, imagePointer, sdk.assets, imageId]);
 
   return (
     <div>
