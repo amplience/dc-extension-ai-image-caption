@@ -191,12 +191,26 @@ export function evaluate(
   let value = root;
   for (const token of tokens) {
     if (value && typeof value === "object") {
-      value = value && token in value ? value[token] : undefined;
+      value = token in value ? value[token] : undefined;
     } else {
       break;
     }
   }
+
+  // Handle values in arrays
+  if (!value && startingPointer) {
+    value = [...getParentPath(startingPointer), ...tokens].reduce(
+      (val, pathPart) => (typeof val === "object" ? val[pathPart] : undefined),
+      root
+    );
+  }
+
   return value;
+}
+
+function getParentPath(path) {
+  const [_, ...parentPath] = parse(path).reverse();
+  return parentPath.reverse();
 }
 
 export function set<T = any>(

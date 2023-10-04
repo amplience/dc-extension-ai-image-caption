@@ -5,7 +5,6 @@ export type ContentFieldExtensionContextState = ContentFieldExtension & {
   initialValue: any;
   formValue: any;
   readOnly: boolean;
-  fieldPointer: string | undefined;
 };
 
 export const ContentFieldExtensionContext =
@@ -20,20 +19,6 @@ function WithContentFieldExtension({ children }) {
   const [initialValue, setInitialValue] = useState(undefined);
   const [formValue, setFormValue] = useState({});
   const [readOnly, setReadOnly] = useState(false);
-  const [fieldPointer, setFieldPointer] = useState(undefined);
-
-  const detectFieldPointer = async (sdk: ContentFieldExtension) => {
-    for (let potentialInvalidValue of [1, "", true, {}, []]) {
-      try {
-        const validationResult = await sdk.field.validate(
-          potentialInvalidValue
-        );
-        if (validationResult?.[0]?.pointer) {
-          return validationResult?.[0]?.pointer;
-        }
-      } catch (err: any) {}
-    }
-  };
 
   useEffect(() => {
     init().then((sdk: ContentFieldExtension) => {
@@ -41,9 +26,6 @@ function WithContentFieldExtension({ children }) {
       sdk.field.getValue().then((value) => {
         setInitialValue(value);
         setSDK(sdk);
-        detectFieldPointer(sdk)
-          .then(setFieldPointer)
-          .catch(() => {});
       });
       sdk.frame.startAutoResizer();
       sdk.form.onReadOnlyChange(setReadOnly);
@@ -55,7 +37,7 @@ function WithContentFieldExtension({ children }) {
   return (
     sdk && (
       <ContentFieldExtensionContext.Provider
-        value={{ ...sdk, initialValue, readOnly, formValue, fieldPointer }}
+        value={{ ...sdk, initialValue, readOnly, formValue }}
       >
         {children}
       </ContentFieldExtensionContext.Provider>

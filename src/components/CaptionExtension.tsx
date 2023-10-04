@@ -165,24 +165,26 @@ function CaptionExtension() {
       return `${asset.thumbURL}?w=512&h=512&upscale=false&sm=clamp`;
     };
     try {
-      const imageValue = RelativeJSONPointer.evaluate(
-        imagePointer,
-        sdk.formValue,
-        sdk.fieldPointer
-      );
-      const isImage =
-        imageValue?._meta?.schema ===
-        "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link";
-      const imageChanged = imageId !== imageValue.id;
+      sdk.field.getPath().then((path) => {
+        const imageValue = RelativeJSONPointer.evaluate(
+          imagePointer,
+          sdk.formValue,
+          path
+        );
+        const isImage =
+          imageValue?._meta?.schema ===
+          "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link";
+        const imageChanged = imageId !== imageValue.id;
 
-      if (isImage && imageChanged) {
-        setImageId(imageValue.id);
-        getThumbUrl(imageValue.id).then(setImageUrl);
-      }
+        if (isImage && imageChanged) {
+          setImageId(imageValue.id);
+          getThumbUrl(imageValue.id).then(setImageUrl);
+        }
+      });
     } catch (e) {
       setImageUrl(undefined);
     }
-  }, [sdk.formValue, sdk.fieldPointer, imagePointer, sdk.assets, imageId]);
+  }, [sdk.formValue, imagePointer, sdk.assets, imageId, sdk.field]);
 
   return (
     <div>
