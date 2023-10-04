@@ -209,7 +209,7 @@ export function evaluate(
 }
 
 function getParentPath(path) {
-  const [_, ...parentPath] = parse(path).reverse();
+  const [, ...parentPath] = parse(path).reverse();
   return parentPath.reverse();
 }
 
