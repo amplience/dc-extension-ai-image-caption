@@ -1,5 +1,12 @@
 import React from "react";
-import { IconButton, InputAdornment } from "@mui/material";
+import {
+  IconButton,
+  InputAdornment,
+  Tooltip,
+  TooltipProps,
+  styled,
+  tooltipClasses,
+} from "@mui/material";
 
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import SparkleIcon from "./SparkleIcon";
@@ -24,6 +31,21 @@ function CaptionField(props: CaptionFieldProps) {
     ...other
   } = props;
 
+  const ButtonTooltip = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: "#1a222d",
+      fontSize: "12px",
+      fontWeight: 500,
+      lineHeight: "14px",
+      padding: "5px 9px",
+    },
+    [`& .${tooltipClasses.arrow}`]: {
+      color: "#1a222d",
+    },
+  }));
+
   return (
     <StringField
       {...other}
@@ -42,15 +64,23 @@ function CaptionField(props: CaptionFieldProps) {
                 <CancelOutlinedIcon fontSize="medium" />
               </IconButton>
             ) : (
-              <IconButton
-                aria-label="generate caption"
-                edge="end"
-                color="primary"
-                onClick={onCaption}
-                disabled={captioningDisabled || readOnly}
+              <ButtonTooltip
+                title="Generate Alt Text"
+                placement="left"
+                disableInteractive
+                className="buttonTooltip"
+                arrow
               >
-                <SparkleIcon />
-              </IconButton>
+                <IconButton
+                  aria-label="generate caption"
+                  edge="end"
+                  color="primary"
+                  onClick={onCaption}
+                  disabled={captioningDisabled || readOnly}
+                >
+                  <SparkleIcon />
+                </IconButton>
+              </ButtonTooltip>
             )}
           </InputAdornment>
         ) : undefined,

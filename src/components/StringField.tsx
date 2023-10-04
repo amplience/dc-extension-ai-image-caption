@@ -14,22 +14,20 @@ export type StringFieldProps = TextFieldProps & {
 };
 
 function StringField(props: StringFieldProps) {
-  const { schema = {}, value, readOnly, loading = false } = props;
+  const {
+    schema = {},
+    value,
+    readOnly,
+    loading = false,
+    ...fieldProps
+  } = props;
   const label = schema?.title || "";
   const description = schema?.description || "";
 
-  const maxLength =
-    schema?.maxLength && typeof schema?.maxLength === "number"
-      ? schema?.maxLength
-      : undefined;
-
-  const minLength =
-    schema?.minLength && typeof schema?.minLength === "number"
-      ? schema?.minLength
-      : undefined;
-
+  const maxLength = schema?.maxLength;
+  const minLength = schema?.minLength;
   const pattern =
-    schema?.pattern && typeof schema?.pattern === "string"
+    typeof schema?.pattern === "string"
       ? new RegExp(schema?.pattern)
       : undefined;
 
@@ -50,7 +48,8 @@ function StringField(props: StringFieldProps) {
         label={label}
         disabled={loading || readOnly || props.disabled}
         aria-label={description || label}
-        {...props}
+        value={value}
+        {...fieldProps}
       />
 
       <LinearProgress
