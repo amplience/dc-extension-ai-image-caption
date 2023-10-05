@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import Theme from "./components/Theme";
 import WithContentFieldExtension from "./components/WithFieldExtension";
+import { initGainsight } from "./gainsight";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -14,3 +15,5 @@ root.render(
     </WithContentFieldExtension>
   </React.StrictMode>
 );
+
+initGainsight();
