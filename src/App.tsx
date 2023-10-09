@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { datadogRum } from "@datadog/browser-rum";
 import CaptionExtension from "./components/CaptionExtension";
-import { track } from "./gainsight";
 
 function App() {
   useEffect(() => {
@@ -28,7 +27,6 @@ function App() {
 
       datadogRum.startSessionReplayRecording();
     }
-    track(window, "AI Captioning");
   }, []);
 
   return <CaptionExtension />;

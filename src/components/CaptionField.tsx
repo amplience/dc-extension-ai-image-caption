@@ -16,7 +16,7 @@ import StringField, { StringFieldProps } from "./StringField";
 export type CaptionFieldProps = StringFieldProps & {
   captioningVisible?: boolean;
   captioningDisabled?: boolean;
-  onCaption?: () => void;
+  onCaption?: (generationSource: "auto" | "manual") => void;
   onCancelCaption?: () => void;
 };
 
@@ -45,6 +45,10 @@ function CaptionField(props: CaptionFieldProps) {
       color: "#1a222d",
     },
   }));
+
+  const handleClick = () => {
+    onCaption("manual");
+  };
 
   return (
     <StringField
@@ -75,7 +79,7 @@ function CaptionField(props: CaptionFieldProps) {
                   aria-label="generate caption"
                   edge="end"
                   color="primary"
-                  onClick={onCaption}
+                  onClick={handleClick}
                   disabled={captioningDisabled || readOnly}
                 >
                   <SparkleIcon />

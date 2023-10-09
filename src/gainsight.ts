@@ -15,6 +15,6 @@ export function initGainsight() {
   s.parentNode.insertBefore(script, s);
 }
 
-export function track(win, eventName) {
-  win.aptrinsic("track", eventName);
+export function track(win, eventName, value) {
+  win.aptrinsic("track", eventName, value);
 }
