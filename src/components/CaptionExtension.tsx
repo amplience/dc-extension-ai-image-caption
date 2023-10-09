@@ -145,7 +145,7 @@ function CaptionExtension() {
       }
 
       dispatch({ type: "START_CAPTION", imageUrl: currentImageUrl });
-      track(window, "AI Captioning", { generationSource });
+      track(window, "AI Alt Text Generator", { generationSource });
 
       const { data } = await sdk.connection.request(
         "dc-management-sdk-js:graphql-mutation",
