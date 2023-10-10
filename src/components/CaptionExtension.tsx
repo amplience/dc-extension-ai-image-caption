@@ -80,6 +80,8 @@ const mutation = `
   }
 `;
 
+let captionError = undefined;
+
 function CaptionExtension() {
   const sdk = useContentFieldExtension();
 
@@ -170,6 +172,7 @@ function CaptionExtension() {
         });
       }
     } catch (err) {
+      captionError = err;
       dispatch({
         type: "FAILED_CAPTION",
       });
@@ -199,6 +202,7 @@ function CaptionExtension() {
         schema={sdk.field.schema}
         readOnly={sdk.readOnly}
         loading={status === "captioning"}
+        captionError={captionError}
       />
     </div>
   );

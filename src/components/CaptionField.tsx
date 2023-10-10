@@ -18,6 +18,7 @@ export type CaptionFieldProps = StringFieldProps & {
   captioningDisabled?: boolean;
   onCaption?: () => void;
   onCancelCaption?: () => void;
+  captionError?: { message: String; stack: String };
 };
 
 function CaptionField(props: CaptionFieldProps) {
@@ -28,6 +29,7 @@ function CaptionField(props: CaptionFieldProps) {
     captioningVisible = true,
     captioningDisabled,
     readOnly,
+    captionError,
     ...other
   } = props;
 
@@ -52,6 +54,7 @@ function CaptionField(props: CaptionFieldProps) {
       readOnly={readOnly}
       style={{ width: "100%" }}
       loading={loading}
+      captionError={captionError}
       InputProps={{
         endAdornment: captioningVisible ? (
           <InputAdornment position="end" style={{ marginRight: 10 }}>
