@@ -135,7 +135,7 @@ function CaptionExtension() {
   const handleChange = (event) => {
     const newValue = event.target.value;
 
-    if (newValue.match(/[\t\n\r]+/g)) {
+    if (newValue.match(/[\n\t\r]+|\s{2,}/g)) {
       return;
     }
 
