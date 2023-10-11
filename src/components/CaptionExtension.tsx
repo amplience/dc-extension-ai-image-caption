@@ -135,6 +135,10 @@ function CaptionExtension() {
   const handleChange = (event) => {
     const newValue = event.target.value;
 
+    if (newValue.match(/[\t\n\r]+/g)) {
+      return;
+    }
+
     sdk.field.setValue(newValue).catch(() => {});
     dispatch({ type: "SET_INPUT_VALUE", inputValue: newValue });
   };
