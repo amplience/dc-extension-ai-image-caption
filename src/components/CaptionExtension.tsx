@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useReducer } from "react";
 import { useContentFieldExtension } from "./WithFieldExtension";
 import CaptionField from "./CaptionField";
 import RelativeJSONPointer from "../utils/RelativeJSONPointer";
+import { track } from "../gainsight";
 
 type SetInputValueReducerAction = {
   type: "SET_INPUT_VALUE";
@@ -138,7 +139,7 @@ function CaptionExtension() {
     dispatch({ type: "SET_INPUT_VALUE", inputValue: newValue });
   };
 
-  const handleCaption = async () => {
+  const handleCaption = async (generationSource: "auto" | "manual") => {
     try {
       const currentImageUrl = imageUrl;
       if (!imageUrl) {
@@ -146,6 +147,7 @@ function CaptionExtension() {
       }
 
       dispatch({ type: "START_CAPTION", imageUrl: currentImageUrl });
+      track(window, "AI Alt Text Generator", { generationSource });
 
       const { data } = await sdk.connection.request(
         "dc-management-sdk-js:graphql-mutation",
@@ -185,7 +187,7 @@ function CaptionExtension() {
 
   useEffect(() => {
     if (canCaption && autoCaption && (inputValue === "" || !inputValue)) {
-      handleCaption();
+      handleCaption("auto");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageUrl]);
