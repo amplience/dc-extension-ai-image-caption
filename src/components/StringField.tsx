@@ -55,6 +55,7 @@ function StringField(props: StringFieldProps) {
         value={value}
         error={captionError ? true : false}
         helperText={captionError ? errorMessage : undefined}
+        multiline
         {...fieldProps}
       />
 

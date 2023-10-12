@@ -61,7 +61,10 @@ function CaptionField(props: CaptionFieldProps) {
       captionError={captionError}
       InputProps={{
         endAdornment: captioningVisible ? (
-          <InputAdornment position="end" style={{ marginRight: 10 }}>
+          <InputAdornment
+            position="end"
+            style={{ marginRight: 10, marginTop: 9, alignSelf: "flex-start" }}
+          >
             {loading ? (
               <IconButton
                 aria-label="cancel"
