@@ -11,6 +11,7 @@ export type StringFieldProps = TextFieldProps & {
   value: string;
   readOnly?: boolean;
   loading?: boolean;
+  captionError?: { message: String; stack: String };
 };
 
 function StringField(props: StringFieldProps) {
@@ -19,6 +20,7 @@ function StringField(props: StringFieldProps) {
     value,
     readOnly,
     loading = false,
+    captionError,
     ...fieldProps
   } = props;
   const label = schema?.title || "";
@@ -41,6 +43,8 @@ function StringField(props: StringFieldProps) {
   let invalid: boolean =
     isAboveMaxLength || isBelowMinLength || isNotMatchingPattern;
 
+  const errorMessage = "An error occurred when processing your request";
+
   return (
     <div style={{ display: "flex", flexDirection: "column", marginLeft: 2 }}>
       <TextField
@@ -49,6 +53,9 @@ function StringField(props: StringFieldProps) {
         disabled={loading || readOnly || props.disabled}
         aria-label={description || label}
         value={value}
+        error={captionError ? true : false}
+        helperText={captionError ? errorMessage : undefined}
+        multiline
         {...fieldProps}
       />
 

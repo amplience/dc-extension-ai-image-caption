@@ -16,8 +16,9 @@ import StringField, { StringFieldProps } from "./StringField";
 export type CaptionFieldProps = StringFieldProps & {
   captioningVisible?: boolean;
   captioningDisabled?: boolean;
-  onCaption?: () => void;
+  onCaption?: (generationSource: "auto" | "manual") => void;
   onCancelCaption?: () => void;
+  captionError?: { message: String; stack: String };
 };
 
 function CaptionField(props: CaptionFieldProps) {
@@ -28,6 +29,7 @@ function CaptionField(props: CaptionFieldProps) {
     captioningVisible = true,
     captioningDisabled,
     readOnly,
+    captionError,
     ...other
   } = props;
 
@@ -46,15 +48,23 @@ function CaptionField(props: CaptionFieldProps) {
     },
   }));
 
+  const handleClick = () => {
+    onCaption("manual");
+  };
+
   return (
     <StringField
       {...other}
       readOnly={readOnly}
       style={{ width: "100%" }}
       loading={loading}
+      captionError={captionError}
       InputProps={{
         endAdornment: captioningVisible ? (
-          <InputAdornment position="end" style={{ marginRight: 10 }}>
+          <InputAdornment
+            position="end"
+            style={{ marginRight: 10, marginTop: 9, alignSelf: "flex-start" }}
+          >
             {loading ? (
               <IconButton
                 aria-label="cancel"
@@ -75,7 +85,7 @@ function CaptionField(props: CaptionFieldProps) {
                   aria-label="generate caption"
                   edge="end"
                   color="primary"
-                  onClick={onCaption}
+                  onClick={handleClick}
                   disabled={captioningDisabled || readOnly}
                 >
                   <SparkleIcon />

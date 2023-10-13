@@ -2,6 +2,7 @@ import React, { useEffect, useReducer, useState } from "react";
 import { useContentFieldExtension } from "./WithFieldExtension";
 import CaptionField from "./CaptionField";
 import RelativeJSONPointer from "../utils/RelativeJSONPointer";
+import { track } from "../gainsight";
 
 type SetInputValueReducerAction = {
   type: "SET_INPUT_VALUE";
@@ -80,6 +81,8 @@ const mutation = `
   }
 `;
 
+let captionError = undefined;
+
 function CaptionExtension() {
   const sdk = useContentFieldExtension();
 
@@ -104,11 +107,15 @@ function CaptionExtension() {
   const handleChange = (event) => {
     const newValue = event.target.value;
 
+    if (newValue.match(/[\n\t\r]+|\s{2,}/g)) {
+      return;
+    }
+
     sdk.field.setValue(newValue).catch(() => {});
     dispatch({ type: "SET_INPUT_VALUE", inputValue: newValue });
   };
 
-  const handleCaption = async () => {
+  const handleCaption = async (generationSource: "auto" | "manual") => {
     try {
       const currentImageUrl = imageUrl;
       if (!imageUrl) {
@@ -116,6 +123,7 @@ function CaptionExtension() {
       }
 
       dispatch({ type: "START_CAPTION", imageUrl: currentImageUrl });
+      track(window, "AI Alt Text Generator", { generationSource });
 
       const { data } = await sdk.connection.request(
         "dc-management-sdk-js:graphql-mutation",
@@ -142,6 +150,7 @@ function CaptionExtension() {
         });
       }
     } catch (err) {
+      captionError = err;
       dispatch({
         type: "FAILED_CAPTION",
       });
@@ -154,7 +163,7 @@ function CaptionExtension() {
 
   useEffect(() => {
     if (canCaption && autoCaption && (inputValue === "" || !inputValue)) {
-      handleCaption();
+      handleCaption("auto");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageUrl]);
@@ -198,6 +207,7 @@ function CaptionExtension() {
         schema={sdk.field.schema}
         readOnly={sdk.readOnly}
         loading={status === "captioning"}
+        captionError={captionError}
       />
     </div>
   );
