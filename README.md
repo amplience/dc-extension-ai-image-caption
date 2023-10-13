@@ -1,26 +1,26 @@
 # dc-extension-ai-image-caption
 
-![Amplience Dynamic Content AI Image Caption Extension](media/screenshot.png)
-
 > AI powered image caption text field for use in [Amplience Dynamic Content](https://amplience.com/dynamic-content)
 
-Note: This extension is a **LABS PREVIEW** for use as is without support or warranty.
+![Amplience Dynamic Content AI Image Caption Extension](media/screenshot.png)
 
 This extension uses artificial intelligence to automatically generate image captions for use as alternative text, which is read aloud by screen readers used by visually impaired users.
 
-Users can choose to manually populate the caption or use the automatically generated caption.
+You can configure whether image captions are generated automatically when users add images to fields, or manually when requested by users.
+
+> Note: This extension is a **LABS PREVIEW** for use as is without support or warranty.
 
 ## How to install
 
-### Register Extension
+### Register the Extension
 
-This extension needs to be [registered](https://amplience.com/docs/development/registeringextensions.html) against a Hub with in the Dynamic Content application (Developer -> Extensions).
+This extension must be [registered](https://amplience.com/docs/development/registeringextensions.html) against a hub with in the Dynamic Content application (Development -> Extensions).
 
 ![Setup](media/setup.png)
 
 - Category: Content Field
 - Label: AI Image Caption
-- Name: ai-image-caption _(needs to be unique with the Hub)_
+- Name: ai-image-caption _(needs to be unique with the hub)_
 - URL: [https://ai-image-caption.extensions.content.amplience.net](https://ai-image-caption.extensions.content.amplience.net)
 - Description: _(can be left blank, if you wish)_
 - Initial height: 200
@@ -31,9 +31,9 @@ This extension needs to be [registered](https://amplience.com/docs/development/r
 
 ### Assign the extension to schema
 
-To use the extension, you simply need to add an image field and a string field, which represents the caption, to your content type schema.
+To use the alt text extension, simply associate it with an image field and a string field (that represents the caption) in your content type schema.
 
-The string field should be configured to use the extension along with an `image` param, which informs the extension which image property it should be linked to.
+The string field should be configured to use the `ui:extension` keyword, and use the name that was used to register the extension. An image param must be included to inform the extension which image property it should be linked to.
 
 The `image` param should be a valid [JSON pointer](https://datatracker.ietf.org/doc/html/rfc6901).
 
@@ -64,7 +64,7 @@ The `image` param should be a valid [JSON pointer](https://datatracker.ietf.org/
 
 ## Configuration
 
-You can customize the extension by providing "params" in your installation parameters or inside the content type schema.
+You can customize the alt text generator by providing `"params"` in the installation parameters, or inside your content type schema by adding them to `"params"` object in your `"ui:extension"`.
 
 ### Image property
 
@@ -143,7 +143,7 @@ If the caption extension is used in an array field, the pointer of the image fie
 
 ### Auto caption
 
-If enabled, the extension will automatically generate a caption when the image property is populated instead of requiring the user to manually press the caption button.
+If enabled, the extension will automatically generate a caption when the image property is populated instead of requiring the user to manually press the generate button.
 
 ```json
 {
