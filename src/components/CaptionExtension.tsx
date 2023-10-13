@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { useContentFieldExtension } from "./WithFieldExtension";
 import CaptionField from "./CaptionField";
 import RelativeJSONPointer from "../utils/RelativeJSONPointer";
@@ -91,6 +91,9 @@ function CaptionExtension() {
     status: "idle",
   });
 
+  const [imageUrl, setImageUrl] = useState<string>();
+  const [imageId, setImageId] = useState<string>();
+
   const imagePointer =
     sdk.params.installation?.["image"] || sdk.params.instance?.["image"];
 
@@ -100,37 +103,6 @@ function CaptionExtension() {
 
   const canCaption =
     imagePointer !== undefined && sdk.hub.organizationId !== undefined;
-
-  const defaultHost =
-    sdk.params.installation?.["imageHost"] ||
-    sdk.params.instance?.["imageHost"] ||
-    sdk.visualisation ||
-    process.env.REACT_APP_IMAGE_HOST;
-
-  const imageUrl = useMemo(() => {
-    try {
-      const imageValue = RelativeJSONPointer.evaluate(
-        imagePointer,
-        sdk.formValue,
-        sdk.fieldPointer
-      );
-      if (
-        !imageValue ||
-        imageValue?._meta?.schema !==
-          "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link"
-      ) {
-        return undefined;
-      } else {
-        return `https://${
-          defaultHost || imageValue.defaultHost
-        }/i/${encodeURIComponent(imageValue?.endpoint)}/${encodeURIComponent(
-          imageValue?.name
-        )}.png?w=512&h=512&upscale=false&sm=clamp`;
-      }
-    } catch (err) {
-      return undefined;
-    }
-  }, [imagePointer, sdk.formValue, sdk.fieldPointer, defaultHost]);
 
   const handleChange = (event) => {
     const newValue = event.target.value;
@@ -195,6 +167,33 @@ function CaptionExtension() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageUrl]);
+
+  useEffect(() => {
+    const getThumbUrl = async (id) => {
+      const asset = await sdk.assets.getById(id);
+      return `${asset.thumbURL}?w=512&h=512&upscale=false&sm=clamp`;
+    };
+    try {
+      sdk.field.getPath().then((path) => {
+        const imageValue = RelativeJSONPointer.evaluate(
+          imagePointer,
+          sdk.formValue,
+          path
+        );
+        const isImage =
+          imageValue?._meta?.schema ===
+          "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link";
+        const imageChanged = imageId !== imageValue.id;
+
+        if (isImage && imageChanged) {
+          setImageId(imageValue.id);
+          getThumbUrl(imageValue.id).then(setImageUrl);
+        }
+      });
+    } catch (e) {
+      setImageUrl(undefined);
+    }
+  }, [sdk.formValue, imagePointer, sdk.assets, imageId, sdk.field]);
 
   return (
     <div>
