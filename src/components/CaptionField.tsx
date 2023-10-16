@@ -81,15 +81,17 @@ function CaptionField(props: CaptionFieldProps) {
                 className="buttonTooltip"
                 arrow
               >
-                <IconButton
-                  aria-label="generate caption"
-                  edge="end"
-                  color="primary"
-                  onClick={handleClick}
-                  disabled={captioningDisabled || readOnly}
-                >
-                  <SparkleIcon />
-                </IconButton>
+                <span>
+                  <IconButton
+                    aria-label="generate caption"
+                    edge="end"
+                    color="primary"
+                    onClick={handleClick}
+                    disabled={captioningDisabled || readOnly}
+                  >
+                    <SparkleIcon />
+                  </IconButton>
+                </span>
               </ButtonTooltip>
             )}
           </InputAdornment>

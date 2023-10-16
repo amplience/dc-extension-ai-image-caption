@@ -183,7 +183,7 @@ function CaptionExtension() {
         const isImage =
           imageValue?._meta?.schema ===
           "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link";
-        const imageChanged = imageId !== imageValue.id;
+        const imageChanged = imageId !== imageValue?.id;
 
         if (isImage && imageChanged) {
           setImageId(imageValue.id);
