@@ -1,6 +1,9 @@
 const aptrinsicId = process.env.REACT_APP_APTRINSIC_APP_ID;
 
 export function initGainsight() {
+  if (!aptrinsicId) {
+    return;
+  }
   window.aptrinsic = function () {
     (window.aptrinsic.q = window.aptrinsic.q || []).push(arguments);
   };
