@@ -19,5 +19,7 @@ export function initGainsight() {
 }
 
 export function track(win, eventName, value) {
-  win.aptrinsic("track", eventName, value);
+  if (win.aptrinsic) {
+    win.aptrinsic("track", eventName, value);
+  }
 }
