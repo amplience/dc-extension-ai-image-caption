@@ -94,12 +94,6 @@ export const Loading: Story = {
   },
 };
 
-export const HideCaptioning: Story = {
-  args: {
-    captioningVisible: false,
-  },
-};
-
 export const CaptioningDisabled: Story = {
   args: {
     captioningDisabled: true,

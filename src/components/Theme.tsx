@@ -45,6 +45,36 @@ const theme = extendTheme({
     },
   },
   components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+          fontSize: "14px",
+          height: "32px",
+          "&:disabled": {
+            color: "#CCCCCC",
+            backgroundColor: "#E5E5E5",
+            borderColor: "#E5E5E5",
+          },
+        },
+      },
+    },
+
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          backgroundColor: "#1a222d",
+          fontSize: "12px",
+          fontWeight: 500,
+          lineHeight: "14px",
+          padding: "5px 9px",
+        },
+        arrow: {
+          color: "#1a222d",
+        },
+      },
+    },
+
     MuiInput: {
       styleOverrides: {
         underline: {

@@ -1,8 +1,10 @@
 import { SvgIcon } from "@mui/material";
 
-export const SparklesIcon = () => {
+export const SparklesIcon = (props: { readOnly?: boolean }) => {
   return (
-    <SvgIcon sx={{ fontSize: "32px" }}>
+    <SvgIcon
+      sx={{ fontSize: "32px", color: props.readOnly ? "#D9D9D9" : "#F88B8B" }}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="icon icon-tabler icon-tabler-sparkles"

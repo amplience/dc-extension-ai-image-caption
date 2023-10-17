@@ -8,6 +8,7 @@ import {
   CircularProgress,
   Grid,
   Link,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { SparklesIcon } from "./SparklesIcon";
@@ -212,7 +213,7 @@ function CaptionExtension() {
     <div>
       <Grid container spacing={1} width="100%">
         <Grid item xs="auto">
-          <SparklesIcon />
+          <SparklesIcon readOnly={sdk.readOnly} />
         </Grid>
         <Grid container item spacing={1} xs direction="column">
           <Grid container item xs justifyContent="flex-end">
@@ -242,13 +243,22 @@ function CaptionExtension() {
               {status === "captioning" ? (
                 <CircularProgress size={30} /> // Placeholder for actual 3-dot loading component
               ) : (
-                <Button
-                  variant="outlined"
-                  onClick={handleClick}
-                  sx={{ height: "32px" }}
+                <Tooltip
+                  title="Add an image"
+                  arrow
+                  placement="left"
+                  disableInteractive
                 >
-                  Generate
-                </Button>
+                  <span>
+                    <Button
+                      variant="outlined"
+                      disabled={sdk.readOnly}
+                      onClick={handleClick}
+                    >
+                      Generate
+                    </Button>
+                  </span>
+                </Tooltip>
               )}
             </Grid>
           </Grid>
@@ -258,7 +268,6 @@ function CaptionExtension() {
               onChange={handleChange}
               onCaption={handleCaption}
               onCancelCaption={handleCancelCaption}
-              captioningVisible={canCaption}
               captioningDisabled={imageUrl === undefined}
               schema={sdk.field.schema}
               readOnly={sdk.readOnly}
