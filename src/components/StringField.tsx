@@ -49,7 +49,6 @@ function StringField(props: StringFieldProps) {
     <div style={{ display: "flex", flexDirection: "column", marginLeft: 2 }}>
       <TextField
         variant="standard"
-        label={label}
         disabled={loading || readOnly || props.disabled}
         aria-label={description || label}
         value={value}

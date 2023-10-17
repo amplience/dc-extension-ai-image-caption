@@ -3,6 +3,8 @@ import { useContentFieldExtension } from "./WithFieldExtension";
 import CaptionField from "./CaptionField";
 import RelativeJSONPointer from "../utils/RelativeJSONPointer";
 import { track } from "../gainsight";
+import { Box, Container, Grid, Link, Typography } from "@mui/material";
+import { SparklesIcon } from "./SparklesIcon";
 
 type SetInputValueReducerAction = {
   type: "SET_INPUT_VALUE";
@@ -183,7 +185,7 @@ function CaptionExtension() {
         const isImage =
           imageValue?._meta?.schema ===
           "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link";
-        const imageChanged = imageId !== imageValue.id;
+        const imageChanged = imageId !== imageValue?.id;
 
         if (isImage && imageChanged) {
           setImageId(imageValue.id);
@@ -192,23 +194,56 @@ function CaptionExtension() {
       });
     } catch (e) {
       setImageUrl(undefined);
+      captionError = e;
     }
   }, [sdk.formValue, imagePointer, sdk.assets, imageId, sdk.field]);
 
   return (
     <div>
-      <CaptionField
-        value={inputValue}
-        onChange={handleChange}
-        onCaption={handleCaption}
-        onCancelCaption={handleCancelCaption}
-        captioningVisible={canCaption}
-        captioningDisabled={imageUrl === undefined}
-        schema={sdk.field.schema}
-        readOnly={sdk.readOnly}
-        loading={status === "captioning"}
-        captionError={captionError}
-      />
+      <Grid container spacing={1} width="100%">
+        <Grid item xs="auto">
+          <SparklesIcon />
+        </Grid>
+        <Grid container item spacing={1} xs>
+          <Grid item xs>
+            <Typography sx={{ fontSize: "13px", color: "#333" }}>
+              AI Alt Text Generator
+            </Typography>
+
+            <Typography
+              sx={{
+                fontSize: "11px",
+                color: "#666",
+                width: "100%",
+                paddingBottom: "10px",
+              }}
+            >
+              Add an image and generate an alt text.&nbsp;
+              <Link
+                href="https://amplience.com/developers/docs/knowledge-center/amplience-labs"
+                color="#039BE5"
+                underline="none"
+                sx={{ fontSize: "11px" }}
+              >
+                Amplience Labs Preview
+              </Link>
+            </Typography>
+
+            <CaptionField
+              value={inputValue}
+              onChange={handleChange}
+              onCaption={handleCaption}
+              onCancelCaption={handleCancelCaption}
+              captioningVisible={canCaption}
+              captioningDisabled={imageUrl === undefined}
+              schema={sdk.field.schema}
+              readOnly={sdk.readOnly}
+              loading={status === "captioning"}
+              captionError={captionError}
+            />
+          </Grid>
+        </Grid>
+      </Grid>
     </div>
   );
 }
