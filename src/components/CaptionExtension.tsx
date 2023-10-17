@@ -3,7 +3,13 @@ import { useContentFieldExtension } from "./WithFieldExtension";
 import CaptionField from "./CaptionField";
 import RelativeJSONPointer from "../utils/RelativeJSONPointer";
 import { track } from "../gainsight";
-import { Box, Container, Grid, Link, Typography } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  Grid,
+  Link,
+  Typography,
+} from "@mui/material";
 import { SparklesIcon } from "./SparklesIcon";
 
 type SetInputValueReducerAction = {
@@ -163,6 +169,10 @@ function CaptionExtension() {
     dispatch({ type: "CANCEL_CAPTION" });
   };
 
+  const handleClick = () => {
+    handleCaption("manual");
+  };
+
   useEffect(() => {
     if (canCaption && autoCaption && (inputValue === "" || !inputValue)) {
       handleCaption("auto");
@@ -204,31 +214,45 @@ function CaptionExtension() {
         <Grid item xs="auto">
           <SparklesIcon />
         </Grid>
-        <Grid container item spacing={1} xs>
-          <Grid item xs>
-            <Typography sx={{ fontSize: "13px", color: "#333" }}>
-              AI Alt Text Generator
-            </Typography>
-
-            <Typography
-              sx={{
-                fontSize: "11px",
-                color: "#666",
-                width: "100%",
-                paddingBottom: "10px",
-              }}
-            >
-              Add an image and generate an alt text.&nbsp;
-              <Link
-                href="https://amplience.com/developers/docs/knowledge-center/amplience-labs"
-                color="#039BE5"
-                underline="none"
-                sx={{ fontSize: "11px" }}
+        <Grid container item spacing={1} xs direction="column">
+          <Grid container item xs justifyContent="flex-end">
+            <Grid item xs>
+              <Typography sx={{ fontSize: "13px", color: "#333" }}>
+                AI Alt Text Generator
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "11px",
+                  color: "#666",
+                  width: "100%",
+                }}
               >
-                Amplience Labs Preview
-              </Link>
-            </Typography>
-
+                Add an image and generate an alt text.&nbsp;
+                <Link
+                  href="https://amplience.com/developers/docs/knowledge-center/amplience-labs"
+                  color="#039BE5"
+                  underline="none"
+                  sx={{ fontSize: "11px" }}
+                >
+                  Amplience Labs Preview
+                </Link>
+              </Typography>
+            </Grid>
+            <Grid item xs="auto">
+              {status === "captioning" ? (
+                <CircularProgress size={30} /> // Placeholder for actual 3-dot loading component
+              ) : (
+                <Button
+                  variant="outlined"
+                  onClick={handleClick}
+                  sx={{ height: "32px" }}
+                >
+                  Generate
+                </Button>
+              )}
+            </Grid>
+          </Grid>
+          <Grid item xs>
             <CaptionField
               value={inputValue}
               onChange={handleChange}
