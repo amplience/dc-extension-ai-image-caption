@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  LinearProgress,
-  TextField,
-  TextFieldProps,
-  Typography,
-} from "@mui/material";
+import { TextField, TextFieldProps, Typography } from "@mui/material";
 
 export type StringFieldProps = TextFieldProps & {
   schema?: any;
@@ -56,11 +51,6 @@ function StringField(props: StringFieldProps) {
         helperText={captionError ? errorMessage : undefined}
         multiline
         {...fieldProps}
-      />
-
-      <LinearProgress
-        variant="indeterminate"
-        style={{ opacity: loading ? 1 : 0, marginTop: -2 }}
       />
 
       {!invalid && (

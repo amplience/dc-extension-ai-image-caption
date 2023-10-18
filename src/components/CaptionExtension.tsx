@@ -3,15 +3,9 @@ import { useContentFieldExtension } from "./WithFieldExtension";
 import CaptionField from "./CaptionField";
 import RelativeJSONPointer from "../utils/RelativeJSONPointer";
 import { track } from "../gainsight";
-import {
-  Button,
-  CircularProgress,
-  Grid,
-  Link,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Button, Grid, Link, Tooltip, Typography } from "@mui/material";
 import { SparklesIcon } from "./SparklesIcon";
+import { LoadingIcon } from "./LoadingIcon";
 
 type SetInputValueReducerAction = {
   type: "SET_INPUT_VALUE";
@@ -241,7 +235,7 @@ function CaptionExtension() {
             </Grid>
             <Grid item xs="auto">
               {status === "captioning" ? (
-                <CircularProgress size={30} /> // Placeholder for actual 3-dot loading component
+                <LoadingIcon />
               ) : (
                 <Tooltip
                   title="Add an image"
