@@ -227,6 +227,7 @@ function CaptionExtension() {
                   </Typography>
                   <Link
                     href="https://amplience.com/developers/docs/knowledge-center/amplience-labs"
+                    target="_blank"
                     underline="none"
                     variant="link"
                   >
