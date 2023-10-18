@@ -10,7 +10,6 @@ const Wrapper = ({
   schema,
   params,
   formValue,
-  fieldPointer,
 }) => {
   const [value, setValue] = useState(initialValue || undefined);
   const [imageField, setImageField] = useState(undefined);
@@ -53,7 +52,6 @@ const Wrapper = ({
     <ContentFieldExtensionContext.Provider
       value={
         {
-          fieldPointer,
           connection: {
             request: async (request, { vars }) => {
               await new Promise((resolve) =>
@@ -81,8 +79,8 @@ const Wrapper = ({
             setValue: async (value: string) => {
               setValue(value);
             },
-            validate: (value) => {
-              return [{ pointer: fieldPointer }];
+            async getPath() {
+              return "/image/seo/alt";
             },
           },
           form: {},
@@ -255,7 +253,6 @@ export const WithRelativePointer: Story = {
     },
     organizationId: "org12345",
     initialValue: "saved value",
-    fieldPointer: "/seo/image/alt",
     formValue: {
       img: {
         _meta: {
@@ -289,7 +286,6 @@ export const WithNestedRelativePointer: Story = {
     },
     organizationId: "org12345",
     initialValue: "saved value",
-    fieldPointer: "/image/seo/alt",
     formValue: {
       image: {
         src: {
