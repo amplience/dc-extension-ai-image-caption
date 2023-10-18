@@ -216,7 +216,9 @@ function CaptionExtension() {
           <Grid container item xs justifyContent="flex-end">
             <Grid item xs>
               <Stack direction="column">
-                <Typography variant="title">AI Alt Text Generator</Typography>
+                <Typography variant="title">
+                  Image Alt Text Generator
+                </Typography>
                 <Stack direction="row" spacing={0.5}>
                   <Typography variant={captionError ? "error" : "subtitle"}>
                     {captionError
