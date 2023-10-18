@@ -89,7 +89,7 @@ export const ReadOnly: Story = {
       description: "description",
       minLength: 10,
     },
-    readOnly: true,
+    inactive: true,
   },
 };
 
