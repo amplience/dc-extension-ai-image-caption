@@ -248,6 +248,9 @@ function CaptionExtension() {
                   arrow
                   placement="left"
                   disableInteractive
+                  disableFocusListener={!sdk.readOnly}
+                  disableHoverListener={!sdk.readOnly}
+                  disableTouchListener={!sdk.readOnly}
                 >
                   <span>
                     <Button
