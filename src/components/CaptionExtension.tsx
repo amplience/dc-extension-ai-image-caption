@@ -203,6 +203,9 @@ function CaptionExtension() {
     }
   }, [sdk.formValue, imagePointer, sdk.assets, imageId, sdk.field]);
 
+  const captionErrorMessage =
+    "An error occurred while processing your request. You can still enter alt text yourself. ";
+
   return (
     <div>
       <Grid container spacing={1} width="100%">
@@ -218,11 +221,13 @@ function CaptionExtension() {
               <Typography
                 sx={{
                   fontSize: "11px",
-                  color: "#666",
+                  color: captionError ? "#FF3366" : "#666",
                   width: "100%",
                 }}
               >
-                Add an image and generate an alt text.&nbsp;
+                {captionError
+                  ? captionErrorMessage
+                  : "Add an image and generate an alt text. "}
                 <Link
                   href="https://amplience.com/developers/docs/knowledge-center/amplience-labs"
                   color="#039BE5"
@@ -269,7 +274,6 @@ function CaptionExtension() {
               schema={sdk.field.schema}
               readOnly={sdk.readOnly}
               loading={status === "captioning"}
-              captionError={captionError}
             />
           </Grid>
         </Grid>

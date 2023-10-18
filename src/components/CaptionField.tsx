@@ -6,7 +6,6 @@ export type CaptionFieldProps = StringFieldProps & {
   captioningDisabled?: boolean;
   onCaption?: (generationSource: "auto" | "manual") => void;
   onCancelCaption?: () => void;
-  captionError?: { message: String; stack: String };
 };
 
 function CaptionField(props: CaptionFieldProps) {
@@ -16,7 +15,6 @@ function CaptionField(props: CaptionFieldProps) {
     onCancelCaption,
     captioningDisabled,
     readOnly,
-    captionError,
     ...other
   } = props;
 
@@ -26,7 +24,6 @@ function CaptionField(props: CaptionFieldProps) {
       readOnly={readOnly}
       style={{ width: "100%" }}
       loading={loading}
-      captionError={captionError}
     />
   );
 }
