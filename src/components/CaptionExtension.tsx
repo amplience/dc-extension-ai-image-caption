@@ -3,7 +3,7 @@ import { useContentFieldExtension } from "./WithFieldExtension";
 import CaptionField from "./CaptionField";
 import RelativeJSONPointer from "../utils/RelativeJSONPointer";
 import { track } from "../gainsight";
-import { Button, Grid, Link, Tooltip, Typography } from "@mui/material";
+import { Button, Grid, Link, Stack, Tooltip, Typography } from "@mui/material";
 import { SparklesIcon } from "./SparklesIcon";
 import { LoadingIcon } from "./LoadingIcon";
 
@@ -204,7 +204,7 @@ function CaptionExtension() {
   }, [sdk.formValue, imagePointer, sdk.assets, imageId, sdk.field]);
 
   const captionErrorMessage =
-    "An error occurred while processing your request. You can still enter alt text yourself. ";
+    "An error occurred while processing your request. You can still enter alt text yourself.";
 
   return (
     <div>
@@ -215,28 +215,23 @@ function CaptionExtension() {
         <Grid container item spacing={1} xs direction="column">
           <Grid container item xs justifyContent="flex-end">
             <Grid item xs>
-              <Typography sx={{ fontSize: "13px", color: "#333" }}>
-                AI Alt Text Generator
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: "11px",
-                  color: captionError ? "#FF3366" : "#666",
-                  width: "100%",
-                }}
-              >
-                {captionError
-                  ? captionErrorMessage
-                  : "Add an image and generate an alt text. "}
-                <Link
-                  href="https://amplience.com/developers/docs/knowledge-center/amplience-labs"
-                  color="#039BE5"
-                  underline="none"
-                  sx={{ fontSize: "11px" }}
-                >
-                  Amplience Labs Preview
-                </Link>
-              </Typography>
+              <Stack direction="column">
+                <Typography variant="title">AI Alt Text Generator</Typography>
+                <Stack direction="row" spacing={0.5}>
+                  <Typography variant={captionError ? "error" : "subtitle"}>
+                    {captionError
+                      ? captionErrorMessage
+                      : "Add an image and generate an alt text."}
+                  </Typography>
+                  <Link
+                    href="https://amplience.com/developers/docs/knowledge-center/amplience-labs"
+                    underline="none"
+                    variant="link"
+                  >
+                    Amplience Labs Preview
+                  </Link>
+                </Stack>
+              </Stack>
             </Grid>
             <Grid item xs="auto">
               {status === "captioning" ? (
