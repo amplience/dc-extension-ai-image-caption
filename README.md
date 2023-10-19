@@ -25,9 +25,17 @@ This extension needs to be [registered](https://amplience.com/docs/development/r
 - Description: _(can be left blank, if you wish)_
 - Initial height: 200
 
-#### Permissions
+### Permissions
 
 ![Permissions](media/permissions.png)
+
+API permissions:
+- Read access
+- Modify access
+
+Sandbox permissions:
+- Allow same origin 
+- Allow pop-ups
 
 ### Assign the extension to schema
 
