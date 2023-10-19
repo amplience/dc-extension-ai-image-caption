@@ -99,6 +99,7 @@ function PreviewButton() {
 
 function CaptionError({ error }: { error: any }) {
   if (error?.errors[0]?.extensions?.code === "INSUFFICIENT_CREDITS") {
+    track(window, "AI Credits Limit reached", {});
     return (
       <>
         You're out of Amplience Credits. You can still enter alt text yourself.{" "}
@@ -181,6 +182,8 @@ function CaptionExtension() {
       if (data?.generateCaptionForImage?.caption) {
         const caption = data.generateCaptionForImage.caption;
         sdk.field.setValue(caption).catch(() => {});
+        track(window, "AI Credits used", {});
+
         dispatch({
           type: "COMPLETE_CAPTION",
           caption,
