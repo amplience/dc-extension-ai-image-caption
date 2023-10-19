@@ -206,11 +206,13 @@ function CaptionExtension() {
   const captionErrorMessage =
     "An error occurred while processing your request. You can still enter alt text yourself.";
 
+  const isInactive = sdk.readOnly || !imageUrl;
+
   return (
     <div>
       <Grid container spacing={1} width="100%">
         <Grid item xs="auto">
-          <SparklesIcon readOnly={sdk.readOnly} />
+          <SparklesIcon inactive={isInactive} />
         </Grid>
         <Grid container item spacing={1} xs direction="column">
           <Grid container item xs justifyContent="flex-end">
@@ -244,14 +246,14 @@ function CaptionExtension() {
                   arrow
                   placement="left"
                   disableInteractive
-                  disableFocusListener={!sdk.readOnly}
-                  disableHoverListener={!sdk.readOnly}
-                  disableTouchListener={!sdk.readOnly}
+                  disableFocusListener={!isInactive}
+                  disableHoverListener={!isInactive}
+                  disableTouchListener={!isInactive}
                 >
                   <span>
                     <Button
                       variant="outlined"
-                      disabled={sdk.readOnly}
+                      disabled={isInactive}
                       onClick={handleClick}
                     >
                       Generate
@@ -267,9 +269,8 @@ function CaptionExtension() {
               onChange={handleChange}
               onCaption={handleCaption}
               onCancelCaption={handleCancelCaption}
-              captioningDisabled={imageUrl === undefined}
               schema={sdk.field.schema}
-              readOnly={sdk.readOnly}
+              inactive={isInactive}
               loading={status === "captioning"}
             />
           </Grid>

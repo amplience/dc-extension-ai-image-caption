@@ -1,10 +1,10 @@
 import { SvgIcon } from "@mui/material";
 
-export const SparklesIcon = (props: { readOnly?: boolean }) => {
+export const SparklesIcon = (props: { inactive?: boolean }) => {
   return (
     <SvgIcon
       sx={{
-        color: props.readOnly ? "#D9D9D9" : "#F88B8B",
+        color: props.inactive ? "#D9D9D9" : "#F88B8B",
         fontSize: "32px",
       }}
     >

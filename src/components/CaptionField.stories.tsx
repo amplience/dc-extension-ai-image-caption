@@ -78,7 +78,7 @@ export const ReadOnly: Story = {
       description: "description",
       minLength: 10,
     },
-    readOnly: true,
+    inactive: true,
   },
 };
 
@@ -96,6 +96,6 @@ export const Loading: Story = {
 
 export const CaptioningDisabled: Story = {
   args: {
-    captioningDisabled: true,
+    inactive: true,
   },
 };
