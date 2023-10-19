@@ -29,6 +29,12 @@ This extension needs to be [registered](https://amplience.com/docs/development/r
 
 ![Permissions](media/permissions.png)
 
+API permissions:
+- Read access
+- Modify access
+
+Sandbox permissions:
+- Allow pop-ups
 ### Assign the extension to schema
 
 To use the extension, you simply need to add an image field and a string field, which represents the caption, to your content type schema.
