@@ -101,6 +101,10 @@ const theme = extendTheme({
             backgroundColor: theme.vars.palette.grey[500],
             borderColor: theme.vars.palette.grey[500],
           },
+          "&:hover": {
+            color: "#FFF",
+            backgroundColor: theme.vars.palette.primary.main,
+          },
         }),
       },
     },

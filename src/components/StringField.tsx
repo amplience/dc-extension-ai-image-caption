@@ -4,7 +4,7 @@ import { TextField, TextFieldProps, Typography } from "@mui/material";
 export type StringFieldProps = TextFieldProps & {
   schema?: any;
   value: string;
-  readOnly?: boolean;
+  inactive?: boolean;
   loading?: boolean;
 };
 
@@ -12,7 +12,7 @@ function StringField(props: StringFieldProps) {
   const {
     schema = {},
     value,
-    readOnly,
+    inactive,
     loading = false,
     ...fieldProps
   } = props;
@@ -40,7 +40,7 @@ function StringField(props: StringFieldProps) {
     <div style={{ display: "flex", flexDirection: "column", marginLeft: 2 }}>
       <TextField
         variant="standard"
-        disabled={loading || readOnly || props.disabled}
+        disabled={loading || props.disabled}
         aria-label={description || label}
         value={value}
         multiline

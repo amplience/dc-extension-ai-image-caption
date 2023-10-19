@@ -88,6 +88,7 @@ function PreviewButton() {
   return (
     <Link
       href="https://amplience.com/developers/docs/knowledge-center/amplience-labs"
+      target="_blank"
       underline="none"
       variant="link"
     >
@@ -101,13 +102,14 @@ function CaptionError({ error }: { error: any }) {
     return (
       <>
         You're out of Amplience Credits. You can still enter alt text yourself.{" "}
-        <a
+        <Link
           href="https://amplience.com/developers/docs/ai-services/credits"
           target="_blank"
-          rel="noreferrer"
+          underline="none"
+          variant="link"
         >
           Get more credits
-        </a>
+        </Link>
       </>
     );
   }
@@ -240,11 +242,13 @@ function CaptionExtension() {
     }
   }, [sdk.formValue, imagePointer, sdk.assets, imageId, sdk.field]);
 
+  const isInactive = sdk.readOnly || !imageUrl;
+
   return (
     <div>
       <Grid container spacing={1} width="100%">
         <Grid item xs="auto">
-          <SparklesIcon readOnly={sdk.readOnly} />
+          <SparklesIcon inactive={isInactive} />
         </Grid>
         <Grid container item spacing={1} xs direction="column">
           <Grid container item xs justifyContent="flex-end">
@@ -274,14 +278,14 @@ function CaptionExtension() {
                   arrow
                   placement="left"
                   disableInteractive
-                  disableFocusListener={!sdk.readOnly}
-                  disableHoverListener={!sdk.readOnly}
-                  disableTouchListener={!sdk.readOnly}
+                  disableFocusListener={!isInactive}
+                  disableHoverListener={!isInactive}
+                  disableTouchListener={!isInactive}
                 >
                   <span>
                     <Button
                       variant="outlined"
-                      disabled={sdk.readOnly}
+                      disabled={isInactive}
                       onClick={handleClick}
                     >
                       Generate
@@ -297,9 +301,8 @@ function CaptionExtension() {
               onChange={handleChange}
               onCaption={handleCaption}
               onCancelCaption={handleCancelCaption}
-              captioningDisabled={imageUrl === undefined}
               schema={sdk.field.schema}
-              readOnly={sdk.readOnly}
+              inactive={isInactive}
               loading={status === "captioning"}
             />
           </Grid>
