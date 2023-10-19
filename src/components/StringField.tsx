@@ -40,7 +40,7 @@ function StringField(props: StringFieldProps) {
     <div style={{ display: "flex", flexDirection: "column", marginLeft: 2 }}>
       <TextField
         variant="standard"
-        disabled={loading || inactive || props.disabled}
+        disabled={loading || props.disabled}
         aria-label={description || label}
         value={value}
         multiline
