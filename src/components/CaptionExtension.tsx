@@ -98,7 +98,7 @@ function PreviewButton() {
 }
 
 function CaptionError({ error }: { error: any }) {
-  if (error?.errors[0]?.extensions?.code === "INSUFFICIENT_CREDITS") {
+  if (error?.data?.errors?.[0]?.extensions?.code === "INSUFFICIENT_CREDITS") {
     return (
       <>
         You're out of Amplience Credits. You can still enter alt text yourself.{" "}
