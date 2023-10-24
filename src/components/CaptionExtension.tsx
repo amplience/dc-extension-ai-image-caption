@@ -97,8 +97,11 @@ function PreviewButton() {
   );
 }
 
+const isInsufficientCreditsError = (error: any) =>
+  error?.data?.errors?.[0]?.extensions?.code === "INSUFFICIENT_CREDITS";
+
 function CaptionError({ error }: { error: any }) {
-  if (error?.data?.errors?.[0]?.extensions?.code === "INSUFFICIENT_CREDITS") {
+  if (isInsufficientCreditsError(error)) {
     return (
       <>
         You're out of Amplience Credits. You can still enter alt text yourself.{" "}
@@ -285,7 +288,9 @@ function CaptionExtension() {
                   <span>
                     <Button
                       variant="outlined"
-                      disabled={isInactive}
+                      disabled={
+                        isInactive || isInsufficientCreditsError(captionError)
+                      }
                       onClick={handleClick}
                     >
                       Generate
