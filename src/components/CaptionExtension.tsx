@@ -137,7 +137,6 @@ function CaptionExtension() {
 
   const [imageUrl, setImageUrl] = useState<string>();
   const [imageId, setImageId] = useState<string>();
-  const [] = useState();
 
   const imagePointer =
     sdk.params.installation?.["image"] || sdk.params.instance?.["image"];
