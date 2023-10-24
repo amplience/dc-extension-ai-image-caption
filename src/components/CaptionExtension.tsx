@@ -257,12 +257,7 @@ function CaptionExtension() {
           <Grid container item xs justifyContent="flex-end">
             <Grid item xs>
               <Stack direction="column">
-                <Typography
-                  variant="title"
-                  color={
-                    isInsufficientCreditsError(captionError) ? "#BFBFBF" : ""
-                  }
-                >
+                <Typography variant="title" color={isInactive ? "#BFBFBF" : ""}>
                   Image Alt Text Generator
                 </Typography>
                 <Stack direction="row" spacing={0.5}>
