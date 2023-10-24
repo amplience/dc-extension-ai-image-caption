@@ -84,7 +84,7 @@ const mutation = `
   }
 `;
 
-function PreviewButton() {
+function LabsPreviewLink() {
   return (
     <Link
       href="https://amplience.com/developers/docs/knowledge-center/amplience-labs"
@@ -120,7 +120,7 @@ function CaptionError({ error }: { error: any }) {
   return (
     <>
       An error occurred while processing your request. You can still enter alt
-      text yourself. <PreviewButton></PreviewButton>
+      text yourself. <LabsPreviewLink></LabsPreviewLink>
     </>
   );
 }
@@ -244,7 +244,8 @@ function CaptionExtension() {
     }
   }, [sdk.formValue, imagePointer, sdk.assets, imageId, sdk.field]);
 
-  const isInactive = sdk.readOnly || !imageUrl;
+  const isInactive =
+    sdk.readOnly || !imageUrl || isInsufficientCreditsError(captionError);
 
   return (
     <div>
@@ -256,7 +257,7 @@ function CaptionExtension() {
           <Grid container item xs justifyContent="flex-end">
             <Grid item xs>
               <Stack direction="column">
-                <Typography variant="title">
+                <Typography variant="title" color={isInactive ? "#BFBFBF" : ""}>
                   Image Alt Text Generator
                 </Typography>
                 <Stack direction="row" spacing={0.5}>
@@ -267,7 +268,7 @@ function CaptionExtension() {
                       "Add an image and generate an alt text."
                     )}
                   </Typography>
-                  {!captionError ? <PreviewButton></PreviewButton> : ""}
+                  {!captionError ? <LabsPreviewLink></LabsPreviewLink> : ""}
                 </Stack>
               </Stack>
             </Grid>
@@ -287,9 +288,7 @@ function CaptionExtension() {
                   <span>
                     <Button
                       variant="outlined"
-                      disabled={
-                        isInactive || isInsufficientCreditsError(captionError)
-                      }
+                      disabled={isInactive}
                       onClick={handleClick}
                     >
                       Generate
