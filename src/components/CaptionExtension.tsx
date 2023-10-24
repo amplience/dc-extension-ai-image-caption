@@ -84,7 +84,48 @@ const mutation = `
   }
 `;
 
-let captionError = undefined;
+function PreviewButton() {
+  return (
+    <Link
+      href="https://amplience.com/developers/docs/knowledge-center/amplience-labs"
+      target="_blank"
+      underline="none"
+      variant="link"
+    >
+      Amplience Labs Preview
+    </Link>
+  );
+}
+
+const isInsufficientCreditsError = (error: any) =>
+  error?.data?.errors?.[0]?.extensions?.code === "INSUFFICIENT_CREDITS";
+
+function CaptionError({ error }: { error: any }) {
+  if (isInsufficientCreditsError(error)) {
+    return (
+      <>
+        You're out of Amplience Credits. You can still enter alt text yourself.{" "}
+        <Link
+          href="https://amplience.com/developers/docs/ai-services/credits"
+          target="_blank"
+          underline="none"
+          variant="link"
+        >
+          Get more credits
+        </Link>
+      </>
+    );
+  }
+
+  return (
+    <>
+      An error occurred while processing your request. You can still enter alt
+      text yourself. <PreviewButton></PreviewButton>
+    </>
+  );
+}
+
+let captionError;
 
 function CaptionExtension() {
   const sdk = useContentFieldExtension();
@@ -203,9 +244,6 @@ function CaptionExtension() {
     }
   }, [sdk.formValue, imagePointer, sdk.assets, imageId, sdk.field]);
 
-  const captionErrorMessage =
-    "An error occurred while processing your request. You can still enter alt text yourself.";
-
   const isInactive = sdk.readOnly || !imageUrl;
 
   return (
@@ -223,18 +261,13 @@ function CaptionExtension() {
                 </Typography>
                 <Stack direction="row" spacing={0.5}>
                   <Typography variant={captionError ? "error" : "subtitle"}>
-                    {captionError
-                      ? captionErrorMessage
-                      : "Add an image and generate an alt text."}
+                    {captionError ? (
+                      <CaptionError error={captionError}></CaptionError>
+                    ) : (
+                      "Add an image and generate an alt text."
+                    )}
                   </Typography>
-                  <Link
-                    href="https://amplience.com/developers/docs/knowledge-center/amplience-labs"
-                    target="_blank"
-                    underline="none"
-                    variant="link"
-                  >
-                    Amplience Labs Preview
-                  </Link>
+                  {!captionError ? <PreviewButton></PreviewButton> : ""}
                 </Stack>
               </Stack>
             </Grid>
@@ -254,7 +287,9 @@ function CaptionExtension() {
                   <span>
                     <Button
                       variant="outlined"
-                      disabled={isInactive}
+                      disabled={
+                        isInactive || isInsufficientCreditsError(captionError)
+                      }
                       onClick={handleClick}
                     >
                       Generate
