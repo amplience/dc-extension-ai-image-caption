@@ -104,14 +104,14 @@ function CaptionError({ error }: { error: any }) {
   if (isInsufficientCreditsError(error)) {
     return (
       <>
-        You're out of Amplience Credits. You can still enter alt text yourself.{" "}
+        You're out of Amplience credits. You can still enter alt text yourself.{" "}
         <Link
           href="https://amplience.com/developers/docs/ai-services/credits"
           target="_blank"
           underline="none"
           variant="link"
         >
-          Get more credits
+          Top up your credits
         </Link>
       </>
     );
