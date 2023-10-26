@@ -144,7 +144,6 @@ function CaptionExtension() {
   const trackingParams = {
     name: "dc-extension-ai-image-caption",
     category: "Extension",
-    settings: sdk?.field?.schema?.["ui:extension"],
   };
 
   const [imageUrl, setImageUrl] = useState<string>();
