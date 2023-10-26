@@ -1,26 +1,26 @@
-![Amplience Dynamic Content AI Image Caption Extension](media/screenshot.png)
-
 # dc-extension-ai-image-caption
 
 > AI powered image caption text field for use in [Amplience Dynamic Content](https://amplience.com/dynamic-content)
 
-Note: This extension is a **LABS PREVIEW** for use as is without support or warranty
+![Amplience Dynamic Content AI Image Caption Extension](media/screenshot.png)
 
 This extension uses artificial intelligence to automatically generate image captions for use as alternative text, which is read aloud by screen readers used by visually impaired users.
 
-Users can choose to manually populate the caption or use the automatically generated caption.
+You can configure whether image captions are generated automatically when users add images to fields, or manually when requested by users.
+
+> Note: This extension is a **LABS PREVIEW** for use as is without support or warranty.
 
 ## How to install
 
-### Register Extension
+### Register the Extension
 
-This extension needs to be [registered](https://amplience.com/docs/development/registeringextensions.html) against a Hub with in the Dynamic Content application (Developer -> Extensions).
+This extension must be [registered](https://amplience.com/docs/development/registeringextensions.html) against a hub with in the Dynamic Content application (Development -> Extensions).
 
 ![Setup](media/setup.png)
 
 - Category: Content Field
 - Label: AI Image Caption
-- Name: ai-image-caption _(needs to be unique with the Hub)_
+- Name: ai-image-caption _(needs to be unique with the hub)_
 - URL: [https://ai-image-caption.extensions.content.amplience.net](https://ai-image-caption.extensions.content.amplience.net)
 - Description: _(can be left blank, if you wish)_
 - Initial height: 200
@@ -31,9 +31,9 @@ This extension needs to be [registered](https://amplience.com/docs/development/r
 
 ### Assign the extension to schema
 
-To use the extension, you simply need to add an image field and a string field, which represents the caption, to your content type schema.
+To use the alt text extension, simply associate it with an image field and a string field (that represents the caption) in your content type schema.
 
-The string field should be configured to use the extension along with an `image` param, which informs the extension which image property it should be linked to.
+The string field should be configured to use the `ui:extension` keyword, and use the name that was used to register the extension. An image param must be included to inform the extension which image property it should be linked to.
 
 The `image` param should be a valid [JSON pointer](https://datatracker.ietf.org/doc/html/rfc6901).
 
@@ -64,7 +64,7 @@ The `image` param should be a valid [JSON pointer](https://datatracker.ietf.org/
 
 ## Configuration
 
-You can customize the extension by providing "params" in your installation parameters or inside the content type schema.
+You can customize the alt text generator by providing `"params"` in the installation parameters, or inside your content type schema by adding them to `"params"` object in your `"ui:extension"`.
 
 ### Image property
 
@@ -76,7 +76,7 @@ The extension must be linked to an image property using a [JSON pointer](https:/
 }
 ```
 
-If the caption extension is used inside a partial that is included in multiple content types, you can use a [relative JSON pointer](<https://json-schema.org/draft/2019-09/relative-json-pointer.html#:~:text=JSON%20Pointer%20(RFC%206901)%20is,locations%20from%20within%20the%20document.>) to define the image field.
+If the extension is used inside a partial that is included in multiple content types, you can use a [relative JSON pointer](<https://json-schema.org/draft/2019-09/relative-json-pointer.html#:~:text=JSON%20Pointer%20(RFC%206901)%20is,locations%20from%20within%20the%20document.>) to define the image field.
 
 ```json
 {
@@ -102,25 +102,52 @@ If the caption extension is used inside a partial that is included in multiple c
 }
 ```
 
+If the extension is used in an array field, the pointer of the image field must be relative to the caption field
+
+```json
+{
+  "images": {
+    "title": "Images with captions",
+    "type": "array",
+    "minItems": 0,
+    "maxItems": 10,
+    "items": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "title": "Hero Image",
+          "allOf": [
+            {
+              "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link"
+            }
+          ]
+        },
+        "imageCaption": {
+          "title": "Hero Alt Text",
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 200,
+          "ui:extension": {
+            "name": "ai-image-caption",
+            "params": {
+              "image": "/image"
+            }
+          }
+        }
+      },
+      "propertyOrder": []
+    }
+  }
+}
+```
+
 ### Auto caption
 
-If enabled, the extension will automatically generate a caption when the image property is populated instead of requiring the user to manually press the caption button.
+If enabled, the extension will automatically generate a caption when the image property is populated instead of requiring the user to manually press the generate button.
 
 ```json
 {
   "autoCaption": true
-}
-```
-
-### Image Host
-
-By default, this extension consumes images from your virtual staging environment. If your VSE is [configured](https://amplience.com/developers/docs/dev-tools/guides-tutorials/virtual-staging/#virtual-staging-environment-security) to only allow access from a limited set of IP addresses the AI captioning system will be unable to load the images for captioning.
-
-You can configure the extension to load images from a different host using the `imageHost` parameter. The example below will load images from the public published URL which will allow image captioning for any published image.
-
-```json
-{
-  "imageHost": "cdn.media.amplience.net"
 }
 ```
 
@@ -129,6 +156,7 @@ You can configure the extension to load images from a different host using the `
 - 50 caption limit per day per organization
 - This extension is only compatible with hubs that are linked to an organization. Accounts that have not yet [migrated](https://amplience.com/developers/docs/knowledge-center/faqs/account/) from legacy permissions will not see the AI caption feature.
 - This extension is in **LABS PREVIEW** for use as is without support or warranty
+- Restoring the content item via the version history to a version that doesn't have alt text will send a graphql request that will populate the alt text field
 
 ## How to run locally
 
