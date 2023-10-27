@@ -100,8 +100,15 @@ function LabsPreviewLink() {
 const isInsufficientCreditsError = (error: any) =>
   error?.data?.errors?.[0]?.extensions?.code === "INSUFFICIENT_CREDITS";
 
-function CaptionError({ error }: { error: any }) {
+function CaptionError({
+  error,
+  trackingParams,
+}: {
+  error: any;
+  trackingParams: any;
+}) {
   if (isInsufficientCreditsError(error)) {
+    track(window, "AI Credits Limit reached", trackingParams);
     return (
       <>
         You're out of Amplience credits. You can still enter alt text yourself.{" "}
@@ -134,6 +141,10 @@ function CaptionExtension() {
     inputValue: sdk?.initialValue || "",
     status: "idle",
   });
+  const trackingParams = {
+    name: "dc-extension-ai-image-caption",
+    category: "Extension",
+  };
 
   const [imageUrl, setImageUrl] = useState<string>();
   const [imageId, setImageId] = useState<string>();
@@ -167,7 +178,10 @@ function CaptionExtension() {
       }
 
       dispatch({ type: "START_CAPTION", imageUrl: currentImageUrl });
-      track(window, "AI Alt Text Generator", { generationSource });
+      track(window, "AI Alt Text Generator", {
+        ...trackingParams,
+        generationSource,
+      });
 
       const { data } = await sdk.connection.request(
         "dc-management-sdk-js:graphql-mutation",
@@ -183,6 +197,8 @@ function CaptionExtension() {
       if (data?.generateCaptionForImage?.caption) {
         const caption = data.generateCaptionForImage.caption;
         sdk.field.setValue(caption).catch(() => {});
+        track(window, "AI Credits used", trackingParams);
+
         dispatch({
           type: "COMPLETE_CAPTION",
           caption,
@@ -263,7 +279,10 @@ function CaptionExtension() {
                 <Stack direction="row" spacing={0.5}>
                   <Typography variant={captionError ? "error" : "subtitle"}>
                     {captionError ? (
-                      <CaptionError error={captionError}></CaptionError>
+                      <CaptionError
+                        error={captionError}
+                        trackingParams={trackingParams}
+                      ></CaptionError>
                     ) : (
                       "Add an image and generate an alt text."
                     )}
