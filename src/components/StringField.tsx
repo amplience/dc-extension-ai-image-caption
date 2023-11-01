@@ -1,26 +1,19 @@
 import React from "react";
-import {
-  LinearProgress,
-  TextField,
-  TextFieldProps,
-  Typography,
-} from "@mui/material";
+import { TextField, TextFieldProps, Typography } from "@mui/material";
 
 export type StringFieldProps = TextFieldProps & {
   schema?: any;
   value: string;
-  readOnly?: boolean;
+  inactive?: boolean;
   loading?: boolean;
-  captionError?: { message: String; stack: String };
 };
 
 function StringField(props: StringFieldProps) {
   const {
     schema = {},
     value,
-    readOnly,
+    inactive,
     loading = false,
-    captionError,
     ...fieldProps
   } = props;
   const label = schema?.title || "";
@@ -43,25 +36,15 @@ function StringField(props: StringFieldProps) {
   let invalid: boolean =
     isAboveMaxLength || isBelowMinLength || isNotMatchingPattern;
 
-  const errorMessage = "An error occurred when processing your request";
-
   return (
     <div style={{ display: "flex", flexDirection: "column", marginLeft: 2 }}>
       <TextField
         variant="standard"
-        label={label}
-        disabled={loading || readOnly || props.disabled}
+        disabled={loading || props.disabled}
         aria-label={description || label}
         value={value}
-        error={captionError ? true : false}
-        helperText={captionError ? errorMessage : undefined}
         multiline
         {...fieldProps}
-      />
-
-      <LinearProgress
-        variant="indeterminate"
-        style={{ opacity: loading ? 1 : 0, marginTop: -2 }}
       />
 
       {!invalid && (

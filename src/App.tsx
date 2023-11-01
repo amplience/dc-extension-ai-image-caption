@@ -23,6 +23,7 @@ function App() {
         defaultPrivacyLevel: "allow",
         sampleRate: 100,
         useCrossSiteSessionCookie: true,
+        proxy: "https://dd-proxy.amplience.net",
       });
 
       datadogRum.startSessionReplayRecording();

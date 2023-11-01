@@ -3,6 +3,9 @@ import { useContentFieldExtension } from "./WithFieldExtension";
 import CaptionField from "./CaptionField";
 import RelativeJSONPointer from "../utils/RelativeJSONPointer";
 import { track } from "../gainsight";
+import { Button, Grid, Link, Stack, Tooltip, Typography } from "@mui/material";
+import { SparklesIcon } from "./SparklesIcon";
+import { LoadingIcon } from "./LoadingIcon";
 
 type SetInputValueReducerAction = {
   type: "SET_INPUT_VALUE";
@@ -81,7 +84,55 @@ const mutation = `
   }
 `;
 
-let captionError = undefined;
+function LabsPreviewLink() {
+  return (
+    <Link
+      href="https://amplience.com/developers/docs/knowledge-center/amplience-labs"
+      target="_blank"
+      underline="none"
+      variant="link"
+    >
+      Amplience Labs Preview
+    </Link>
+  );
+}
+
+const isInsufficientCreditsError = (error: any) =>
+  error?.data?.errors?.[0]?.extensions?.code === "INSUFFICIENT_CREDITS";
+
+function CaptionError({
+  error,
+  trackingParams,
+}: {
+  error: any;
+  trackingParams: any;
+}) {
+  if (isInsufficientCreditsError(error)) {
+    track(window, "AI Credits Limit reached", trackingParams);
+    return (
+      <>
+        You're out of Amplience credits. You can still enter alt text yourself.{" "}
+        <Link
+          href="https://amplience.com/developers/docs/ai-services/credits"
+          target="_blank"
+          underline="none"
+          variant="link"
+        >
+          Top up your credits
+        </Link>
+      </>
+    );
+  }
+
+  return (
+    <>
+      An error occurred while processing your request. You can still enter alt
+      text yourself. <LabsPreviewLink></LabsPreviewLink>
+    </>
+  );
+}
+
+let captionError;
 
 function CaptionExtension() {
   const sdk = useContentFieldExtension();
@@ -90,6 +141,10 @@ function CaptionExtension() {
     inputValue: sdk?.initialValue || "",
     status: "idle",
   });
+  const trackingParams = {
+    name: "dc-extension-ai-image-caption",
+    category: "Extension",
+  };
 
   const [imageUrl, setImageUrl] = useState<string>();
   const [imageId, setImageId] = useState<string>();
@@ -123,7 +178,10 @@ function CaptionExtension() {
       }
 
       dispatch({ type: "START_CAPTION", imageUrl: currentImageUrl });
-      track(window, "AI Alt Text Generator", { generationSource });
+      track(window, "AI Alt Text Generator", {
+        ...trackingParams,
+        generationSource,
+      });
 
       const { data } = await sdk.connection.request(
         "dc-management-sdk-js:graphql-mutation",
@@ -139,6 +197,8 @@ function CaptionExtension() {
       if (data?.generateCaptionForImage?.caption) {
         const caption = data.generateCaptionForImage.caption;
         sdk.field.setValue(caption).catch(() => {});
+        track(window, "AI Credits used", trackingParams);
+
         dispatch({
           type: "COMPLETE_CAPTION",
           caption,
@@ -159,6 +219,10 @@ function CaptionExtension() {
 
   const handleCancelCaption = () => {
     dispatch({ type: "CANCEL_CAPTION" });
+  };
+
+  const handleClick = () => {
+    handleCaption("manual");
   };
 
   useEffect(() => {
@@ -192,23 +256,80 @@ function CaptionExtension() {
       });
     } catch (e) {
       setImageUrl(undefined);
+      captionError = e;
     }
   }, [sdk.formValue, imagePointer, sdk.assets, imageId, sdk.field]);
 
+  const isInactive =
+    sdk.readOnly || !imageUrl || isInsufficientCreditsError(captionError);
+
   return (
     <div>
-      <CaptionField
-        value={inputValue}
-        onChange={handleChange}
-        onCaption={handleCaption}
-        onCancelCaption={handleCancelCaption}
-        captioningVisible={canCaption}
-        captioningDisabled={imageUrl === undefined}
-        schema={sdk.field.schema}
-        readOnly={sdk.readOnly}
-        loading={status === "captioning"}
-        captionError={captionError}
-      />
+      <Grid container spacing={1} width="100%">
+        <Grid item xs="auto">
+          <SparklesIcon inactive={isInactive} />
+        </Grid>
+        <Grid container item spacing={1} xs direction="column">
+          <Grid container item xs justifyContent="flex-end">
+            <Grid item xs>
+              <Stack direction="column">
+                <Typography variant="title" color={isInactive ? "#BFBFBF" : ""}>
+                  Image Alt Text Generator
+                </Typography>
+                <Stack direction="row" spacing={0.5}>
+                  <Typography variant={captionError ? "error" : "subtitle"}>
+                    {captionError ? (
+                      <CaptionError
+                        error={captionError}
+                        trackingParams={trackingParams}
+                      ></CaptionError>
+                    ) : (
+                      "Add an image and generate an alt text."
+                    )}
+                  </Typography>
+                  {!captionError ? <LabsPreviewLink></LabsPreviewLink> : ""}
+                </Stack>
+              </Stack>
+            </Grid>
+            <Grid item xs="auto">
+              {status === "captioning" ? (
+                <LoadingIcon />
+              ) : (
+                <Tooltip
+                  title="Add an image"
+                  arrow
+                  placement="left"
+                  disableInteractive
+                  disableFocusListener={!isInactive}
+                  disableHoverListener={!isInactive}
+                  disableTouchListener={!isInactive}
+                >
+                  <span>
+                    <Button
+                      variant="outlined"
+                      disabled={isInactive}
+                      onClick={handleClick}
+                    >
+                      Generate
+                    </Button>
+                  </span>
+                </Tooltip>
+              )}
+            </Grid>
+          </Grid>
+          <Grid item xs>
+            <CaptionField
+              value={inputValue}
+              onChange={handleChange}
+              onCaption={handleCaption}
+              onCancelCaption={handleCancelCaption}
+              schema={sdk.field.schema}
+              inactive={isInactive}
+              loading={status === "captioning"}
+            />
+          </Grid>
+        </Grid>
+      </Grid>
     </div>
   );
 }
