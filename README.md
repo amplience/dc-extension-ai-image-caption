@@ -165,6 +165,8 @@ If enabled, the extension will automatically generate a caption when the image p
 - This extension is only compatible with hubs that are linked to an organization. Accounts that have not yet [migrated](https://amplience.com/developers/docs/knowledge-center/faqs/account/) from legacy permissions will not see the AI caption feature.
 - This extension is in **LABS PREVIEW** for use as is without support or warranty
 - Restoring the content item via the version history to a version that doesn't have alt text will send a graphql request that will populate the alt text field
+- Images must be hosted / served by Amplience
+- The Image object that you configure to point to MUST be a standard Amplience image object as per the [data type](https://amplience.com/developers/docs/schema-reference/data-types/#image) and associated image link
 
 ## How to run locally
 
