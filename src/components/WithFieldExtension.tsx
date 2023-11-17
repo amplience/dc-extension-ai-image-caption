@@ -29,7 +29,9 @@ function WithContentFieldExtension({ children }) {
       });
       sdk.frame.startAutoResizer();
       sdk.form.onReadOnlyChange(setReadOnly);
-      sdk.form.onFormValueChange(setFormValue);
+      sdk.form.onFormValueChange((x) => {
+        setFormValue(x);
+      });
     });
     return () => {};
   }, []);
