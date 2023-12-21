@@ -263,7 +263,7 @@ function CaptionExtension() {
       setImageUrl(undefined);
       captionError = e;
     }
-  }, [sdk.formValue, imagePointer, sdk.assets, imageId, sdk.field]);
+  }, [sdk.formValue, imagePointer, sdk.assets, imageId, sdk.field, inputValue]);
 
   const isInactive =
     sdk.readOnly || !imageUrl || isInsufficientCreditsError(captionError);
