@@ -254,11 +254,16 @@ function CaptionExtension() {
           getThumbUrl(imageValue.id).then(setImageUrl);
         }
       });
+      sdk.field.getValue().then((val: string) => {
+        if (val !== inputValue) {
+          dispatch({ type: "SET_INPUT_VALUE", inputValue: val });
+        }
+      });
     } catch (e) {
       setImageUrl(undefined);
       captionError = e;
     }
-  }, [sdk.formValue, imagePointer, sdk.assets, imageId, sdk.field]);
+  }, [sdk.formValue, imagePointer, sdk.assets, imageId, sdk.field, inputValue]);
 
   const isInactive =
     sdk.readOnly || !imageUrl || isInsufficientCreditsError(captionError);
