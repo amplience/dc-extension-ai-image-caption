@@ -252,7 +252,6 @@ function CaptionExtension() {
         if (isImage && imageChanged) {
           setImageId(imageValue.id);
           getThumbUrl(imageValue.id).then(setImageUrl);
-          // dispatch({ type: "SET_INPUT_VALUE", inputValue: "" });
         }
       });
       sdk.field.getValue().then((val: string) => {
